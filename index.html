@@ -1,0 +1,2160 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SpeakUp! Vocational English 3A: Integrated Assessment</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+        body { font-family: 'Poppins', sans-serif; overflow-x: hidden; background-color: #f8fafc; -webkit-tap-highlight-color: transparent; }
+        
+        /* Ambient Background Orbs */
+        .bg-orb-1 { position: fixed; top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(99,102,241,0.18) 0%, rgba(0,0,0,0) 70%); border-radius: 50%; z-index: -2; animation: floatOrb 15s infinite alternate ease-in-out; filter: blur(40px); }
+        .bg-orb-2 { position: fixed; bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: radial-gradient(circle, rgba(236,72,153,0.12) 0%, rgba(168,85,247,0.12) 40%, rgba(0,0,0,0) 70%); border-radius: 50%; z-index: -2; animation: floatOrb 20s infinite alternate-reverse ease-in-out; filter: blur(40px); }
+        @keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(8%, 8%) scale(1.15); } }
+
+        /* Premium Glass Panel */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 40px -10px rgba(31, 38, 135, 0.05), inset 0 1px 0 rgba(255,255,255,0.8);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+        
+        /* Button Shine Animation */
+        @keyframes shine { 0% { left: -100%; } 20% { left: 200%; } 100% { left: 200%; } }
+        .btn-shine { position: relative; overflow: hidden; }
+        .btn-shine::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+            transform: skewX(-20deg); animation: shine 4s infinite ease-in-out; z-index: 1;
+        }
+        
+        .clickable-word {
+            cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 6px; padding: 0 4px; margin: 0 -4px; position: relative;
+        }
+        .clickable-word:hover, .clickable-word:active { 
+            background-color: #e0e7ff; color: #4338ca; transform: scale(1.08) translateY(-1px); 
+            display: inline-block; box-shadow: 0 4px 10px -2px rgba(67, 56, 202, 0.2); z-index: 10;
+        }
+        
+        /* Responsive Slide Container */
+        .slide-container { 
+            min-height: 280px; background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; 
+            position: relative; overflow-y: auto; overflow-x: hidden;
+            box-shadow: 0 10px 30px -5px rgba(0,0,0,0.06), inset 0 2px 10px rgba(0,0,0,0.02); 
+            width: 100%; display: flex; flex-direction: column; transition: all 0.3s ease;
+        }
+        @media (min-width: 768px) { .slide-container { aspect-ratio: 16/9; min-height: auto; overflow: hidden; } }
+        
+        .slide-container::-webkit-scrollbar { width: 6px; }
+        .slide-container::-webkit-scrollbar-track { background: transparent; }
+        .slide-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+        .page { 
+            display: none; opacity: 0;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(15px);
+        }
+        .page.active { display: block; opacity: 1; transform: translateY(0); }
+        #page-intro.active { display: flex; }
+        
+        .floating-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: -1; overflow: hidden; }
+        .emoji { position: absolute; top: 0; font-size: 2rem; opacity: 0; animation: floatUp linear infinite; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg) scale(0.8); opacity: 0; }
+            10% { opacity: 0.15; } 90% { opacity: 0.15; }
+            100% { transform: translateY(-20vh) rotate(360deg) scale(1.1); opacity: 0; }
+        }
+
+        .script-scroll::-webkit-scrollbar { width: 5px; }
+        .script-scroll::-webkit-scrollbar-track { background: rgba(248,250,252,0.5); border-radius: 10px; }
+        .script-scroll::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
+        
+        .script-container-mask {
+            mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+        }
+
+        @keyframes ripple {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        .listening-active { animation: ripple 1.5s infinite; background-color: #ef4444 !important; color: white !important; }
+
+        /* Custom Details/Summary Accordion */
+        details > summary { list-style: none; }
+        details > summary::-webkit-details-marker { display: none; }
+
+        /* FIX: Ultimate iOS Safari Canvas Fix */
+        #recording-canvas { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            pointer-events: none; 
+            z-index: -9999;
+            opacity: 0.01; 
+            transform: scale(0.001);
+            transform-origin: top left;
+        }
+    </style>
+</head>
+<body class="bg-[#f8fafc] min-h-screen text-gray-800 selection:bg-indigo-200 selection:text-indigo-900">
+
+    <div class="bg-orb-1"></div>
+    <div class="bg-orb-2"></div>
+    <canvas id="recording-canvas" width="1280" height="720"></canvas>
+
+    <!-- Syllable Toast -->
+    <div id="syllable-toast" class="fixed top-20 left-1/2 transform -translate-x-1/2 bg-white/95 backdrop-blur-xl text-gray-800 px-5 py-3 md:px-8 md:py-4 rounded-full shadow-[0_20px_50px_rgba(79,70,229,0.15)] z-[100] hidden transition-all duration-400 opacity-0 border border-indigo-100/50 flex items-center gap-3 md:gap-4 max-w-[90vw]">
+        <div class="bg-gradient-to-br from-indigo-100 to-purple-100 text-indigo-600 w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center shrink-0 text-sm md:text-base shadow-inner"><i class="fa-solid fa-volume-high"></i></div>
+        <div class="text-left overflow-hidden">
+            <div class="text-[9px] md:text-[10px] font-bold text-indigo-400/80 uppercase tracking-widest mb-0.5">Syllables</div>
+            <div id="syllable-text" class="font-mono text-base md:text-xl tracking-wider md:tracking-widest font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-800 to-purple-800 whitespace-nowrap overflow-hidden text-ellipsis"></div>
+        </div>
+    </div>
+
+    <div class="floating-bg" id="emoji-container"></div>
+
+    <!-- 1. Intro Landing Page -->
+    <div id="page-intro" class="page active fixed inset-0 z-50 flex-col items-center min-h-[100dvh] w-full overflow-y-auto p-4">
+        <div class="glass-panel p-6 md:p-16 max-w-4xl w-full sm:w-11/12 text-center transform transition-all duration-500 flex flex-col items-center m-auto relative overflow-hidden group border-white/80">
+            <div class="text-5xl md:text-7xl mb-6 animate-bounce text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 to-purple-600 drop-shadow-sm"><i class="fa-solid fa-video"></i></div>
+            <h2 class="text-xs md:text-lg text-indigo-500 font-bold mb-3 uppercase tracking-[0.2em] border-b-2 border-indigo-100 pb-2 inline-block">Language Centre</h2>
+            <h3 class="text-xl md:text-4xl font-bold text-gray-700 mb-4 leading-tight">Vocational English 3A:<br>Integrated Assessment</h3>
+            <h1 class="text-5xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 mb-10 tracking-tight drop-shadow-sm">SpeakUp!</h1>
+            
+            <button onclick="startApp()" class="btn-shine group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full hover:from-indigo-500 hover:to-purple-500 hover:shadow-[0_15px_40px_-10px_rgba(79,70,229,0.8)] active:scale-95 text-lg md:text-2xl border border-indigo-400/30 w-full sm:w-auto">
+                <span class="relative flex items-center justify-center gap-3 z-10 w-full">Let's Get Started!! <span class="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">🚀</span></span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="main-nav" class="bg-white/80 backdrop-blur-xl border-b border-gray-100/50 sticky top-0 z-40 hidden transition-all duration-300 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 py-3 md:py-4 flex justify-between items-center">
+            <div class="font-black text-lg md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 cursor-pointer flex items-center gap-2 hover:opacity-80 transition-opacity" onclick="goToHome()">
+                <i class="fa-solid fa-video text-indigo-600"></i> SpeakUp!
+            </div>
+            <button onclick="goToHome()" class="text-gray-500 hover:text-indigo-600 font-semibold flex items-center gap-2 transition-all active:scale-95 bg-gray-50 hover:bg-indigo-50 px-4 py-2 rounded-full text-xs md:text-sm border border-transparent hover:border-indigo-100">
+                <i class="fa-solid fa-house"></i> Home
+            </button>
+        </div>
+    </nav>
+
+    <div class="max-w-5xl mx-auto px-4 py-6 md:py-10 relative">
+        
+        <!-- 2. Main Menu -->
+        <div id="page-menu" class="page text-center">
+            <h2 class="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-gray-800 to-gray-600 mb-8 md:mb-12 mt-2 md:mt-4 tracking-tight">Select a Module</h2>
+            
+            <div class="flex flex-col gap-5 md:gap-6 max-w-3xl mx-auto">
+                
+                <!-- Practice Papers -->
+                <div onclick="nav('practice-menu')" class="group bg-gradient-to-br from-white to-gray-50/50 backdrop-blur-sm rounded-3xl p-5 md:p-6 flex items-center gap-4 md:gap-6 cursor-pointer transform transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-15px_rgba(79,70,229,0.25)] border border-gray-100 hover:border-indigo-200 text-left relative overflow-hidden">
+                    <div class="absolute left-0 top-0 bottom-0 w-2 bg-gradient-to-b from-indigo-400 to-indigo-600 group-hover:w-3 transition-all"></div>
+                    <div class="bg-indigo-50 group-hover:bg-indigo-100 transition-colors p-3 md:p-4 rounded-2xl text-4xl md:text-5xl w-20 h-20 md:w-24 md:h-24 flex items-center justify-center shrink-0 group-hover:scale-110 duration-300 shadow-inner">📚</div>
+                    <div class="flex-1">
+                        <h2 class="text-xl md:text-2xl font-bold text-gray-800 group-hover:text-indigo-600 transition-colors mb-1">Practice Papers</h2>
+                        <p class="text-gray-500 text-xs md:text-base leading-snug">Guided practice with segmented scripts and slide recording.</p>
+                    </div>
+                    <div class="hidden sm:flex bg-white w-10 h-10 rounded-full items-center justify-center shadow-sm group-hover:bg-indigo-50 transition-colors shrink-0">
+                        <i class="fa-solid fa-chevron-right text-gray-300 group-hover:text-indigo-500 group-hover:translate-x-0.5 transition-all text-lg"></i>
+                    </div>
+                </div>
+
+                <!-- Mock Paper -->
+                <div onclick="nav('mock-login')" class="group bg-gradient-to-br from-white to-gray-50/50 backdrop-blur-sm rounded-3xl p-5 md:p-6 flex items-center gap-4 md:gap-6 cursor-pointer transform transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-15px_rgba(225,29,72,0.25)] border border-gray-100 hover:border-rose-200 text-left relative overflow-hidden">
+                    <div class="absolute left-0 top-0 bottom-0 w-2 bg-gradient-to-b from-rose-400 to-rose-600 group-hover:w-3 transition-all"></div>
+                    <div class="bg-rose-50 group-hover:bg-rose-100 transition-colors p-3 md:p-4 rounded-2xl text-4xl md:text-5xl w-20 h-20 md:w-24 md:h-24 flex items-center justify-center shrink-0 group-hover:scale-110 duration-300 shadow-inner">🎯</div>
+                    <div class="flex-1">
+                        <h2 class="text-xl md:text-2xl font-bold text-gray-800 group-hover:text-rose-600 transition-colors mb-1">Mock Paper</h2>
+                        <p class="text-gray-500 text-xs md:text-base leading-snug">Simulated assessment environment. (Password required)</p>
+                    </div>
+                    <div class="hidden sm:flex bg-white w-10 h-10 rounded-full items-center justify-center shadow-sm group-hover:bg-rose-50 transition-colors shrink-0">
+                        <i class="fa-solid fa-chevron-right text-gray-300 group-hover:text-rose-500 group-hover:translate-x-0.5 transition-all text-lg"></i>
+                    </div>
+                </div>
+
+                <!-- Assessment Prep -->
+                <div onclick="nav('assessment')" class="group bg-gradient-to-br from-white to-gray-50/50 backdrop-blur-sm rounded-3xl p-5 md:p-6 flex items-center gap-4 md:gap-6 cursor-pointer transform transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-15px_rgba(147,51,234,0.25)] border border-gray-100 hover:border-purple-200 text-left relative overflow-hidden">
+                    <div class="absolute left-0 top-0 bottom-0 w-2 bg-gradient-to-b from-purple-400 to-purple-600 group-hover:w-3 transition-all"></div>
+                    <div class="bg-purple-50 group-hover:bg-purple-100 transition-colors p-3 md:p-4 rounded-2xl text-4xl md:text-5xl w-20 h-20 md:w-24 md:h-24 flex items-center justify-center shrink-0 group-hover:scale-110 duration-300 shadow-inner">🛠️</div>
+                    <div class="flex-1">
+                        <h2 class="text-xl md:text-2xl font-bold text-gray-800 group-hover:text-purple-600 transition-colors mb-1">Assessment Prep</h2>
+                        <p class="text-gray-500 text-xs md:text-base leading-snug">Paste your own script, listen to AI, and record audio.</p>
+                    </div>
+                    <div class="hidden sm:flex bg-white w-10 h-10 rounded-full items-center justify-center shadow-sm group-hover:bg-purple-50 transition-colors shrink-0">
+                        <i class="fa-solid fa-chevron-right text-gray-300 group-hover:text-purple-500 group-hover:translate-x-0.5 transition-all text-lg"></i>
+                    </div>
+                </div>
+
+                <!-- Vocab Hub -->
+                <div onclick="nav('vocab-menu')" class="group bg-gradient-to-br from-amber-50 to-orange-50/80 backdrop-blur-sm rounded-3xl p-5 md:p-6 flex items-center gap-4 md:gap-6 cursor-pointer transform transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(245,158,11,0.4)] border-2 border-amber-200 hover:border-amber-400 text-left relative overflow-hidden shadow-md">
+                    <div class="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-b from-amber-400 to-orange-500"></div>
+                    <div class="absolute -right-10 -top-10 w-32 h-32 bg-white opacity-20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700 pointer-events-none"></div>
+                    
+                    <div class="bg-white group-hover:bg-amber-100 transition-colors p-3 md:p-4 rounded-2xl text-4xl md:text-5xl w-20 h-20 md:w-24 md:h-24 flex items-center justify-center shrink-0 group-hover:scale-110 duration-300 shadow-sm border border-amber-100 relative z-10">🧠</div>
+                    <div class="flex-1 relative z-10">
+                        <h2 class="text-xl md:text-2xl font-black text-amber-800 group-hover:text-amber-600 transition-colors mb-1 flex items-center flex-wrap gap-2">
+                            Vocab Hub 
+                            <span class="bg-gradient-to-r from-red-500 to-orange-500 text-white text-[10px] md:text-xs px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider animate-pulse shadow-sm">Hot 🔥</span>
+                        </h2>
+                        <p class="text-amber-700/80 text-xs md:text-base font-medium leading-snug">Master dates, months, and advanced workplace vocabulary.</p>
+                    </div>
+                    <div class="hidden sm:flex bg-white w-10 h-10 rounded-full items-center justify-center shadow-md group-hover:bg-amber-500 transition-colors shrink-0 z-10">
+                        <i class="fa-solid fa-chevron-right text-amber-500 group-hover:text-white group-hover:translate-x-0.5 transition-all text-lg"></i>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ================= Vocab Hub Menu Page ================= -->
+        <div id="page-vocab-menu" class="page text-center">
+            <div class="flex justify-between items-center mb-6 md:mb-8 max-w-3xl mx-auto">
+                <h2 class="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-orange-600">Vocab Hub</h2>
+                <button onclick="nav('menu')" class="text-gray-500 hover:text-amber-600 bg-white hover:bg-amber-50 px-4 py-2 md:px-5 md:py-2.5 rounded-full shadow-sm border border-gray-100 hover:border-amber-100 transition-all active:scale-95 text-xs md:text-sm font-semibold flex items-center gap-2"><i class="fa-solid fa-arrow-left"></i> Back</button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 max-w-3xl mx-auto">
+                <!-- Game 1: Dates & Months -->
+                <div onclick="nav('dates-game')" class="group bg-white rounded-3xl p-6 md:p-8 cursor-pointer transform transition-all duration-300 hover:-translate-y-1 hover:shadow-xl border border-gray-100 hover:border-blue-300 text-center relative overflow-hidden flex flex-col h-full">
+                    <div class="absolute top-0 right-0 bg-blue-100 text-blue-600 text-[10px] md:text-xs font-bold px-3 py-1 rounded-bl-xl">Pronunciation</div>
+                    <div class="text-5xl md:text-6xl mb-4 drop-shadow-md group-hover:scale-110 transition-transform mt-2">🗓️</div>
+                    <h3 class="text-xl md:text-2xl font-bold text-gray-800 mb-2 group-hover:text-blue-600">Dates & Months Echo</h3>
+                    <p class="text-gray-500 text-xs md:text-sm flex-grow">Listen to the correct pronunciation and mimic it using your microphone! </p>
+                    <div class="mt-4 text-blue-500 font-bold text-sm opacity-0 group-hover:opacity-100 transition-opacity">Play Now <i class="fa-solid fa-arrow-right ml-1"></i></div>
+                </div>
+
+                <!-- Game 2: Advanced Vocab -->
+                <div onclick="nav('vocab-review')" class="group bg-white rounded-3xl p-6 md:p-8 cursor-pointer transform transition-all duration-300 hover:-translate-y-1 hover:shadow-xl border border-gray-100 hover:border-purple-300 text-center relative overflow-hidden flex flex-col h-full">
+                    <div class="absolute top-0 right-0 bg-purple-100 text-purple-600 text-[10px] md:text-xs font-bold px-3 py-1 rounded-bl-xl">Official Word Bank</div>
+                    <div class="text-5xl md:text-6xl mb-4 drop-shadow-md group-hover:scale-110 transition-transform mt-2">💎</div>
+                    <div class="flex flex-col items-center gap-1.5 mb-2">
+                        <h3 class="text-xl md:text-2xl font-bold text-gray-800 group-hover:text-purple-600 leading-none">Word Master</h3>
+                        <span class="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm">Advanced</span>
+                    </div>
+                    <p class="text-gray-500 text-xs md:text-sm flex-grow">Review advanced workplace vocabulary from your TLP Units. Fill in the blanks!</p>
+                    <div class="mt-4 text-purple-500 font-bold text-sm opacity-0 group-hover:opacity-100 transition-opacity">Review & Play <i class="fa-solid fa-arrow-right ml-1"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= Dates & Months Game Page ================= -->
+        <div id="page-dates-game" class="page">
+            <div class="max-w-2xl mx-auto glass-panel p-5 md:p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl md:text-2xl font-black text-blue-700 flex items-center gap-2"><i class="fa-solid fa-calendar-day"></i> Dates Echo</h2>
+                    <button onclick="nav('vocab-menu')" class="text-gray-500 hover:text-blue-600 bg-white px-3 py-1.5 md:px-4 md:py-2 rounded-full shadow-sm text-xs md:text-sm font-semibold border border-gray-100"><i class="fa-solid fa-xmark mr-1"></i> Exit</button>
+                </div>
+                
+                <!-- Instructions Screen -->
+                <div id="dates-instructions" class="text-center py-6">
+                    <div class="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4 text-4xl text-blue-500 shadow-inner">🎙️</div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">How to Play</h3>
+                    <ul class="text-left max-w-md mx-auto space-y-4 mb-6 text-gray-600 text-sm md:text-base bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                        <li class="flex items-start gap-3"><i class="fa-solid fa-eye text-blue-500 mt-1"></i> <span>Look at the date shown on the screen (e.g. Thu, 25 Dec).</span></li>
+                        <li class="flex items-start gap-3"><i class="fa-solid fa-volume-high text-blue-500 mt-1"></i> <span>Click the speaker icon to hear the correct pronunciation.</span></li>
+                        <li class="flex items-start gap-3"><i class="fa-solid fa-microphone text-rose-500 mt-1"></i> <span>Click the microphone and repeat exactly what you heard!</span></li>
+                        <li class="flex items-start gap-3"><i class="fa-solid fa-volume-xmark text-amber-500 mt-1"></i> <span class="font-bold text-amber-700">Important: Make sure you are in a quiet environment for accurate grading!</span></li>
+                    </ul>
+
+                    <!-- System Requirements Reminder -->
+                    <div class="max-w-md mx-auto mb-8 bg-amber-50 border border-amber-200 rounded-2xl p-5 text-left shadow-sm">
+                        <h4 class="font-bold text-amber-800 mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-bullhorn"></i> System Requirements (系統要求)
+                        </h4>
+                        <div class="text-sm text-amber-700 space-y-2.5">
+                            <p><strong class="text-amber-900">💻 Computer (Recommended):</strong> Use Google Chrome or Microsoft Edge.</p>
+                            <p><strong class="text-amber-900">📱 Mobile:</strong> Use Safari for iPhone, and Google Chrome for Android.</p>
+                            <p class="text-xs italic opacity-90">⚠️ Note: Built-in browsers on some mainland Chinese phone brands may not support the voice feature.</p>
+                            <hr class="border-amber-200 my-3">
+                            <p class="text-xs leading-relaxed">為了獲得最佳體驗，強烈建議使用電腦 (Chrome/Edge)。手機用戶請使用 Safari (iPhone) 或 Chrome (Android)。部分內地品牌手機的內置瀏覽器可能無法支援語音功能。</p>
+                        </div>
+                    </div>
+
+                    <button onclick="startDatesGameplay()" class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-10 py-3.5 rounded-full font-bold text-lg hover:shadow-lg transition-all active:scale-95 w-full sm:w-auto">Got it, Start! <i class="fa-solid fa-play ml-2"></i></button>
+                </div>
+
+                <!-- Gameplay Screen -->
+                <div id="dates-gameplay" class="hidden">
+                    <!-- TTS Controls for Dates -->
+                    <div class="flex justify-center gap-3 md:gap-4 mb-6 bg-blue-50/50 p-3 rounded-xl border border-blue-100">
+                        <div class="w-1/2 max-w-[140px]">
+                            <label class="block text-[10px] md:text-xs font-bold text-blue-400 uppercase tracking-wider mb-1"><i class="fa-solid fa-earth-americas mr-1"></i> Accent</label>
+                            <select id="date-accent-select" class="w-full border border-blue-200 rounded-lg px-2 py-1.5 md:py-2 bg-white text-xs md:text-sm focus:ring-2 focus:ring-blue-400 outline-none text-gray-700 font-medium">
+                                <option value="UK" selected>UK English</option>
+                                <option value="US">US English</option>
+                            </select>
+                        </div>
+                        <div class="w-1/2 max-w-[140px]">
+                            <label class="block text-[10px] md:text-xs font-bold text-blue-400 uppercase tracking-wider mb-1"><i class="fa-solid fa-gauge-high mr-1"></i> Speed</label>
+                            <select id="date-speed-select" class="w-full border border-blue-200 rounded-lg px-2 py-1.5 md:py-2 bg-white text-xs md:text-sm focus:ring-2 focus:ring-blue-400 outline-none text-gray-700 font-medium">
+                                <option value="0.5">0.5x (Slow)</option>
+                                <option value="0.8">0.8x</option>
+                                <option value="1.0" selected>1.0x (Normal)</option>
+                                <option value="1.2">1.2x</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="text-center mb-8 md:mb-10">
+                        <div class="text-gray-400 font-bold uppercase tracking-widest text-xs md:text-sm mb-2">Read this date:</div>
+                        <div id="date-display" class="text-4xl md:text-6xl font-black text-gray-800 mb-8 drop-shadow-sm tracking-tight">Thu, 25 Dec</div>
+                        
+                        <div class="flex justify-center gap-4 md:gap-6">
+                            <button onclick="playDateTTS()" class="bg-white border-2 border-blue-200 text-blue-600 hover:bg-blue-50 w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-2xl md:text-3xl transition-all active:scale-90 shadow-sm" title="Listen">
+                                <i class="fa-solid fa-volume-high"></i>
+                            </button>
+                            <button id="btn-date-mic" onclick="toggleDateRecognition()" class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-2xl md:text-3xl transition-all active:scale-90 shadow-lg" title="Speak">
+                                <i class="fa-solid fa-microphone"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="date-feedback-area" class="text-center min-h-[120px] bg-gray-50 rounded-2xl p-4 border border-gray-100 flex flex-col justify-center">
+                        <div id="date-speech-result" class="text-base md:text-lg font-medium text-gray-500 mb-2 italic">Click the mic to speak...</div>
+                        <div id="date-verdict" class="text-lg md:text-xl font-bold hidden"></div>
+                    </div>
+
+                    <div class="mt-6 text-center">
+                        <button onclick="nextDateQuestion()" class="bg-gray-800 text-white px-8 py-3.5 rounded-full font-bold hover:bg-gray-700 transition-all active:scale-95 shadow-md w-full sm:w-auto">Next Date <i class="fa-solid fa-arrow-right ml-2"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= Word Master Review Page ================= -->
+        <div id="page-vocab-review" class="page">
+            <div class="max-w-3xl mx-auto glass-panel p-5 md:p-8">
+                <div class="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
+                    <h2 class="text-xl md:text-2xl font-black text-purple-700 flex items-center gap-2"><i class="fa-solid fa-book-open-reader"></i> Advanced TLP Word Bank</h2>
+                    <button onclick="nav('vocab-menu')" class="text-gray-400 hover:text-gray-600 bg-gray-50 px-3 py-1.5 rounded-full text-xs font-bold border border-gray-200"><i class="fa-solid fa-xmark mr-1"></i> Exit</button>
+                </div>
+
+                <div class="bg-purple-50 border border-purple-100 rounded-xl p-4 mb-6 text-xs md:text-sm text-purple-800 flex items-start gap-3">
+                    <i class="fa-solid fa-lightbulb mt-0.5 text-purple-500"></i>
+                    <p>Review the advanced workplace vocabulary below before starting the game. The game will test you on the <strong>10 words shown below</strong>. If you make mistakes, the system will remember them and prioritise them in your next game!</p>
+                </div>
+
+                <!-- Target Words Section -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-bold text-purple-800 mb-3 border-b border-purple-200 pb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-bullseye text-rose-500"></i> Target Words for This Round
+                    </h3>
+                    <div id="vocab-target-container" class="space-y-2">
+                        <!-- Injected via JS -->
+                    </div>
+                </div>
+
+                <!-- Full Word Bank Section (Collapsible) -->
+                <details class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group mb-8">
+                    <summary class="font-bold text-sm md:text-base p-4 cursor-pointer bg-gray-50 group-open:bg-gray-100 transition-colors flex justify-between items-center select-none">
+                        <span class="flex items-center gap-2 text-gray-700"><i class="fa-solid fa-book text-gray-500"></i> Full Word Bank </span>
+                        <i class="fa-solid fa-chevron-down text-gray-400 group-open:rotate-180 transition-transform"></i>
+                    </summary>
+                    <div class="p-3 md:p-4 border-t border-gray-100 space-y-3 bg-gray-50/50" id="vocab-review-container">
+                        <!-- Injected via JS -->
+                    </div>
+                </details>
+
+                <div class="text-center sticky bottom-4 z-10">
+                    <button onclick="startVocabGame()" class="btn-shine bg-gradient-to-r from-purple-600 to-pink-600 text-white px-10 py-4 rounded-full font-black text-lg hover:shadow-lg transition-all active:scale-95 w-full sm:w-auto shadow-[0_10px_20px_-10px_rgba(147,51,234,0.6)] border border-purple-400/30">
+                        <span class="relative z-10 flex items-center justify-center gap-2">Start Game <i class="fa-solid fa-gamepad"></i></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= Advanced Vocab Game Page ================= -->
+        <div id="page-vocab-game" class="page">
+            <div class="max-w-3xl mx-auto glass-panel p-5 md:p-8">
+                <div class="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
+                    <h2 class="text-xl md:text-2xl font-black text-purple-700 flex items-center gap-2"><i class="fa-solid fa-gem"></i> Word Master</h2>
+                    <div class="flex items-center gap-3">
+                        <div class="bg-purple-100 text-purple-800 px-3 py-1 md:px-4 md:py-1.5 rounded-full font-bold text-xs md:text-sm shadow-inner">Score: <span id="vocab-score">0</span></div>
+                        <button onclick="nav('vocab-menu')" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg md:text-xl"></i></button>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="w-full bg-gray-100 rounded-full h-2 mb-8 overflow-hidden">
+                    <div id="vocab-progress" class="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all duration-500" style="width: 10%"></div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100 mb-6 relative">
+                    <div class="absolute -top-3 -right-3 bg-amber-400 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow-md text-sm" id="vocab-q-num">1</div>
+                    
+                    <div class="mb-4 flex flex-col sm:flex-row sm:items-center gap-2">
+                        <span class="bg-blue-50 text-blue-600 text-[10px] md:text-xs font-bold px-2 py-1 rounded uppercase tracking-wider inline-block w-max">Chinese Meaning</span>
+                        <span id="vocab-hint" class="text-gray-600 font-medium text-sm md:text-base"></span>
+                    </div>
+
+                    <div class="text-lg md:text-2xl font-medium text-gray-800 leading-relaxed mb-6" id="vocab-sentence">
+                        <!-- Sentence -->
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4" id="vocab-options">
+                        <!-- Options -->
+                    </div>
+                </div>
+
+                <div id="vocab-game-feedback" class="text-center font-bold text-lg md:text-xl h-8 md:h-10 mb-4 transition-all flex items-center justify-center"></div>
+
+                <button id="vocab-next-btn" onclick="nextVocabQuestion()" class="hidden w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3.5 md:py-4 rounded-xl font-bold text-base md:text-lg hover:shadow-lg transition-all active:scale-95">Next Question <i class="fa-solid fa-arrow-right ml-2"></i></button>
+                
+                <!-- End Screen -->
+                <div id="vocab-end-screen" class="hidden text-center py-6 md:py-8">
+                    <div class="text-5xl md:text-6xl mb-4">🏆</div>
+                    <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-2">Practice Complete!</h3>
+                    <p class="text-gray-500 mb-6 text-sm md:text-base">You scored <span id="vocab-final-score" class="font-bold text-purple-600 text-lg"></span> out of <span id="vocab-total-q"></span>.</p>
+                    <div class="flex flex-col sm:flex-row justify-center gap-3">
+                        <button onclick="nav('vocab-review')" class="bg-gray-800 text-white px-8 py-3.5 rounded-full font-bold hover:bg-gray-700 transition-all active:scale-95 w-full sm:w-auto"><i class="fa-solid fa-rotate-right mr-2"></i> Play Again (Reshuffle)</button>
+                        <button onclick="nav('vocab-menu')" class="bg-white border border-gray-300 text-gray-700 px-8 py-3.5 rounded-full font-bold hover:bg-gray-50 transition-all active:scale-95 w-full sm:w-auto">Exit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= Practice Menu Page ================= -->
+        <div id="page-practice-menu" class="page text-center">
+            <div class="flex justify-between items-center mb-6 md:mb-8 max-w-3xl mx-auto">
+                <h2 class="text-2xl md:text-3xl font-black text-gray-800">Select a Paper</h2>
+                <button onclick="nav('menu')" class="text-gray-500 hover:text-indigo-600 bg-white hover:bg-indigo-50 px-4 py-2 md:px-5 md:py-2.5 rounded-full shadow-sm border border-gray-100 hover:border-indigo-100 transition-all active:scale-95 text-xs md:text-sm font-semibold flex items-center gap-2"><i class="fa-solid fa-arrow-left"></i> Back</button>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5 max-w-3xl mx-auto">
+                <div onclick="loadPaper('practice', 0)" class="group bg-gradient-to-br from-white to-gray-50 rounded-2xl p-5 md:p-6 cursor-pointer transform transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_15px_30px_-10px_rgba(59,130,246,0.2)] border border-gray-100 hover:border-blue-200 text-left flex flex-col items-start gap-3 md:gap-4">
+                    <div class="text-3xl md:text-4xl bg-gradient-to-br from-blue-50 to-blue-100 w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-inner border border-blue-50">✈️</div>
+                    <div>
+                        <h3 class="text-base md:text-lg font-bold text-gray-800 group-hover:text-blue-600 transition-colors">Practice Paper 1</h3>
+                        <p class="text-gray-500 text-xs md:text-sm mt-1">Aviation Fair</p>
+                    </div>
+                </div>
+                <div onclick="loadPaper('practice', 1)" class="group bg-gradient-to-br from-white to-gray-50 rounded-2xl p-5 md:p-6 cursor-pointer transform transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_15px_30px_-10px_rgba(16,185,129,0.2)] border border-gray-100 hover:border-emerald-200 text-left flex flex-col items-start gap-3 md:gap-4">
+                    <div class="text-3xl md:text-4xl bg-gradient-to-br from-emerald-50 to-emerald-100 w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-inner border border-emerald-50">🖨️</div>
+                    <div>
+                        <h3 class="text-base md:text-lg font-bold text-gray-800 group-hover:text-emerald-600 transition-colors">Practice Paper 2</h3>
+                        <p class="text-gray-500 text-xs md:text-sm mt-1">New Photocopiers</p>
+                    </div>
+                </div>
+                <div onclick="loadPaper('practice', 2)" class="group bg-gradient-to-br from-white to-gray-50 rounded-2xl p-5 md:p-6 cursor-pointer transform transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_15px_30px_-10px_rgba(245,158,11,0.2)] border border-gray-100 hover:border-amber-200 text-left flex flex-col items-start gap-3 md:gap-4">
+                    <div class="text-3xl md:text-4xl bg-gradient-to-br from-amber-50 to-amber-100 w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-inner border border-amber-50">🛋️</div>
+                    <div>
+                        <h3 class="text-base md:text-lg font-bold text-gray-800 group-hover:text-amber-600 transition-colors">Practice Paper 3</h3>
+                        <p class="text-gray-500 text-xs md:text-sm mt-1">Chill-out Room</p>
+                    </div>
+                </div>
+                <div onclick="loadPaper('practice', 3)" class="group bg-gradient-to-br from-white to-gray-50 rounded-2xl p-5 md:p-6 cursor-pointer transform transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_15px_30px_-10px_rgba(239,68,68,0.2)] border border-gray-100 hover:border-red-200 text-left flex flex-col items-start gap-3 md:gap-4">
+                    <div class="text-3xl md:text-4xl bg-gradient-to-br from-red-50 to-red-100 w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-inner border border-red-50">🐉</div>
+                    <div>
+                        <h3 class="text-base md:text-lg font-bold text-gray-800 group-hover:text-red-600 transition-colors">Practice Paper 4</h3>
+                        <p class="text-gray-500 text-xs md:text-sm mt-1">Hong Kong Dragon Boat Race</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= Mock Login Page ================= -->
+        <div id="page-mock-login" class="page text-center">
+            <div class="max-w-md mx-auto bg-white/90 backdrop-blur-md rounded-3xl p-8 md:p-10 shadow-[0_20px_50px_-15px_rgba(225,29,72,0.15)] border border-gray-100 mt-6 md:mt-10 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-rose-400 via-pink-500 to-purple-500"></div>
+                <button onclick="nav('menu')" class="text-gray-400 hover:text-gray-800 mb-6 md:mb-8 flex items-center text-sm transition-colors active:scale-95"><i class="fa-solid fa-arrow-left mr-2"></i> Back</button>
+                <div class="text-5xl md:text-6xl mb-4 md:mb-6 drop-shadow-md">🔒</div>
+                <h2 class="text-2xl md:text-3xl font-black text-gray-800 mb-2 md:mb-3 tracking-tight">Mock Exam</h2>
+                <p class="text-gray-500 mb-6 md:mb-8 text-xs md:text-sm leading-relaxed">Please enter the password provided by your instructor to begin the assessment.</p>
+                <input type="password" id="mock-password" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 md:py-4 mb-4 md:mb-6 text-center text-lg md:text-xl focus:border-rose-400 focus:ring-4 focus:ring-rose-50 focus:outline-none transition-all shadow-inner" placeholder="Enter Password">
+                <button onclick="checkMockPassword()" class="btn-shine w-full bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold py-3.5 md:py-4 rounded-xl transition-all active:scale-95 shadow-[0_10px_20px_-10px_rgba(225,29,72,0.6)] text-base md:text-lg border border-rose-400/30">
+                    <span class="relative z-10">Enter Assessment</span>
+                </button>
+                <p id="mock-error" class="text-rose-500 mt-4 font-bold hidden bg-rose-50 py-2 rounded-lg text-xs md:text-sm animate-pulse border border-rose-100">Incorrect password!</p>
+            </div>
+        </div>
+
+        <!-- ================= Assessment Prep Page ================= -->
+        <div id="page-assessment" class="page">
+            <div class="glass-panel p-5 md:p-10">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 md:mb-8 gap-4">
+                    <h2 class="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-700 to-indigo-700 tracking-tight flex items-center gap-3">
+                        <span class="bg-gradient-to-br from-purple-100 to-indigo-100 text-purple-600 p-2 md:p-2.5 rounded-xl text-lg md:text-xl shadow-inner border border-purple-50"><i class="fa-solid fa-wand-magic-sparkles"></i></span> Assessment Prep
+                    </h2>
+                    <button onclick="nav('menu')" class="flex items-center gap-2 px-4 py-2 md:px-5 md:py-2.5 bg-white border border-gray-200 rounded-full text-gray-600 hover:bg-purple-50 hover:text-purple-600 hover:border-purple-200 transition-all active:scale-95 text-xs md:text-sm font-semibold shadow-sm w-full sm:w-auto justify-center">
+                        <i class="fa-solid fa-arrow-left"></i> Back
+                    </button>
+                </div>
+                <p class="text-gray-500 mb-4 md:mb-6 text-sm md:text-base">Paste your own script below to practise text-to-speech and record your audio.</p>
+                
+                <textarea id="assessment-script" class="w-full h-48 md:h-64 p-4 md:p-6 bg-white border border-gray-200 rounded-2xl focus:ring-4 focus:ring-purple-50 focus:border-purple-400 focus:outline-none resize-y mb-6 text-gray-700 text-base md:text-lg leading-relaxed shadow-inner transition-all script-scroll" placeholder="Paste your script here..."></textarea>
+                
+                <div class="bg-gradient-to-r from-white to-purple-50/30 border border-gray-100 shadow-sm rounded-2xl p-4 md:p-6 mb-8 md:mb-10 flex flex-col md:flex-row gap-4 md:gap-6 items-start md:items-end">
+                    <div class="w-full md:w-auto">
+                        <label class="block text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 md:mb-2"><i class="fa-solid fa-head-side-cough text-purple-500 mr-1"></i> Voice</label>
+                        <select id="assess-voice" class="w-full md:w-auto border border-gray-200 rounded-xl px-3 py-2 md:px-4 md:py-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-purple-400 min-w-[140px] text-gray-700 font-medium cursor-pointer shadow-sm text-sm md:text-base">
+                            <option value="UK" selected>UK English</option>
+                            <option value="US">US English</option>
+                        </select>
+                    </div>
+                    <div class="w-full md:w-auto">
+                        <label class="block text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 md:mb-2"><i class="fa-solid fa-sliders text-blue-500 mr-1"></i> Speed</label>
+                        <select id="assess-speed" class="w-full md:w-auto border border-gray-200 rounded-xl px-3 py-2 md:px-4 md:py-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-purple-400 min-w-[140px] text-gray-700 font-medium cursor-pointer shadow-sm text-sm md:text-base">
+                            <option value="0.5">0.5x (Very Slow)</option>
+                            <option value="0.8">0.8x (Slow)</option>
+                            <option value="1.0" selected>1.0x (Normal)</option>
+                            <option value="1.2">1.2x (Fast)</option>
+                        </select>
+                    </div>
+                    <div class="flex gap-2 md:gap-3 w-full md:w-auto md:ml-auto mt-2 md:mt-0">
+                        <button onclick="playAssessmentTTS()" class="flex-1 md:flex-none bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-4 py-2.5 md:px-8 md:py-2.5 rounded-xl font-bold transition-all active:scale-95 flex items-center justify-center gap-2 shadow-[0_8px_20px_-6px_rgba(147,51,234,0.5)] text-sm md:text-base">
+                            <i class="fa-solid fa-volume-high"></i> Listen
+                        </button>
+                        <button onclick="stopTTS()" class="flex-1 md:flex-none bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 px-4 py-2.5 md:px-6 md:py-2.5 rounded-xl font-bold transition-all active:scale-95 flex items-center justify-center gap-2 shadow-sm text-sm md:text-base">
+                            <i class="fa-solid fa-stop"></i> Stop
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-br from-gray-50 to-gray-100/50 rounded-3xl p-6 md:p-8 border border-gray-100 text-center shadow-inner">
+                    <h3 class="text-lg md:text-xl font-bold text-gray-800 mb-4 md:mb-6 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-microphone-lines text-rose-500"></i> Audio Recording
+                    </h3>
+                    <div class="flex flex-col items-center gap-4">
+                        <button id="btn-assess-record" onclick="toggleAssessRecording()" class="btn-shine bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white px-6 py-3.5 md:px-10 md:py-4 rounded-full font-bold transition-all active:scale-95 flex items-center justify-center gap-3 shadow-[0_10px_20px_-10px_rgba(244,63,94,0.6)] text-base md:text-lg w-full max-w-sm border border-rose-400/30">
+                            <span class="relative z-10 flex items-center gap-2"><i class="fa-solid fa-microphone"></i> Start Recording</span>
+                        </button>
+                        
+                        <div id="assess-audio-result" class="hidden w-full max-w-sm mt-4 bg-white p-4 md:p-5 rounded-2xl shadow-lg border border-gray-100">
+                            <!-- ADDED playsinline to audio just in case -->
+                            <audio id="assess-audio-player" playsinline webkit-playsinline controls class="w-full mb-4 rounded-lg h-10"></audio>
+                            <div class="flex flex-col gap-2 md:gap-3">
+                                <button onclick="shareAudio()" class="flex items-center justify-center gap-2 w-full bg-[#25D366] text-white px-4 py-2.5 md:py-3 rounded-xl hover:bg-[#128C7E] transition-all active:scale-95 font-bold shadow-sm text-sm md:text-base">
+                                    <i class="fa-brands fa-whatsapp text-lg md:text-xl"></i> Share
+                                </button>
+                                <a id="assess-download-link" class="flex items-center justify-center gap-2 w-full bg-gray-800 text-white px-4 py-2.5 md:py-3 rounded-xl hover:bg-gray-900 transition-all active:scale-95 font-bold shadow-sm text-sm md:text-base">
+                                    <i class="fa-solid fa-download"></i> Save MP3
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= Practice Page ================= -->
+        <div id="page-practice" class="page">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 md:mb-8 gap-4">
+                <h2 class="text-xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-gray-800 to-gray-600 tracking-tight" id="practice-title">Practice Paper 1</h2>
+                <button onclick="nav('menu')" class="w-full sm:w-auto text-gray-500 hover:text-indigo-600 bg-white hover:bg-indigo-50 px-4 py-2 md:px-5 md:py-2.5 rounded-full shadow-sm border border-gray-100 hover:border-indigo-100 transition-all active:scale-95 text-xs md:text-sm font-semibold flex items-center justify-center gap-2"><i class="fa-solid fa-arrow-left"></i> Back</button>
+            </div>
+
+            <!-- Global TTS Controls -->
+            <div id="tts-controls" class="flex flex-col sm:flex-row flex-wrap gap-4 md:gap-6 mb-6 md:mb-8 bg-white/80 backdrop-blur-md p-4 md:p-5 rounded-2xl border border-gray-100 shadow-sm items-start sm:items-end transition-all duration-300">
+                <div class="w-full sm:w-auto flex gap-4">
+                    <div class="flex-1 sm:flex-none">
+                        <label class="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 md:mb-2 block"><i class="fa-solid fa-earth-americas text-indigo-400 mr-1"></i> Accent</label>
+                        <select id="accent-select" class="w-full border border-gray-200 rounded-xl px-3 py-2 md:px-4 md:py-2 bg-white focus:ring-2 focus:ring-indigo-400 outline-none font-medium cursor-pointer shadow-sm text-sm md:text-base">
+                            <option value="UK" selected>UK</option>
+                            <option value="US">US</option>
+                        </select>
+                    </div>
+                    <div class="flex-1 sm:flex-none">
+                        <label class="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 md:mb-2 block"><i class="fa-solid fa-gauge-high text-blue-400 mr-1"></i> Speed</label>
+                        <select id="speed-select" class="w-full border border-gray-200 rounded-xl px-3 py-2 md:px-4 md:py-2 bg-white focus:ring-2 focus:ring-indigo-400 outline-none font-medium cursor-pointer shadow-sm text-sm md:text-base">
+                            <option value="0.5">0.5x</option>
+                            <option value="0.8">0.8x</option>
+                            <option value="1.0" selected>1.0x</option>
+                            <option value="1.2">1.2x</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="w-full sm:w-auto sm:ml-auto mt-2 sm:mt-0">
+                    <button onclick="stopTTS()" class="w-full sm:w-auto bg-rose-50 text-rose-600 px-4 py-2 md:px-6 md:py-2.5 rounded-xl hover:bg-rose-100 border border-rose-100 transition-colors font-bold text-xs md:text-sm flex items-center justify-center gap-2 active:scale-95"><i class="fa-solid fa-stop"></i> Stop Audio</button>
+                </div>
+            </div>
+
+            <!-- STEP 1: Study Slides -->
+            <div id="step-1" class="glass-panel p-5 md:p-8 mb-6 transition-all duration-500">
+                <div class="flex justify-between items-center mb-4 md:mb-6 border-b border-gray-100 pb-3 md:pb-4 gap-2">
+                    <h3 class="text-lg md:text-2xl font-black text-gray-800 flex items-center gap-2 md:gap-3"><span class="bg-gradient-to-br from-blue-100 to-cyan-100 text-blue-600 w-8 h-8 md:w-10 md:h-10 rounded-xl flex items-center justify-center text-base md:text-lg shadow-inner border border-blue-50"><i class="fa-solid fa-chalkboard"></i></span> Step 1: Slides</h3>
+                    <span id="step1-badge" class="bg-blue-50 text-blue-600 text-[10px] md:text-xs font-black px-3 py-1 md:px-4 md:py-1.5 rounded-full tracking-widest uppercase shrink-0 border border-blue-100 shadow-sm">1 of 3</span>
+                </div>
+                <div class="bg-gradient-to-r from-amber-50 to-yellow-50/50 border border-amber-100 rounded-xl p-3 md:p-4 mb-4 md:mb-6 flex items-start gap-2 md:gap-3 shadow-sm">
+                    <i class="fa-solid fa-lightbulb text-amber-500 text-lg md:text-xl mt-0.5 drop-shadow-sm"></i>
+                    <p class="text-amber-800 text-xs md:text-sm leading-relaxed"><strong>Tip:</strong> Click on <strong>ANY word</strong> in the slides to hear its pronunciation and see its syllables!</p>
+                </div>
+                
+                <div class="max-w-4xl mx-auto">
+                    <div class="slide-container p-2 sm:p-4 bg-white" id="slide-display-study"></div>
+                    <div class="flex justify-between items-center mt-4 md:mt-6 bg-white border border-gray-100 p-1.5 md:p-2 rounded-2xl gap-2 shadow-sm">
+                        <button onclick="changeSlide(-1)" class="bg-gray-50 px-3 py-2 md:px-5 md:py-2.5 rounded-xl hover:bg-gray-100 font-bold text-gray-600 text-xs md:text-sm transition-colors active:scale-95 shrink-0 border border-transparent hover:border-gray-200"><i class="fa-solid fa-chevron-left md:mr-2"></i> <span class="hidden md:inline">Prev</span></button>
+                        <div class="flex flex-col items-center flex-1 text-center">
+                            <span class="text-xs md:text-sm font-bold text-gray-400 uppercase tracking-widest" id="slide-counter-study">Slide 1 / 3</span>
+                        </div>
+                        <button onclick="changeSlide(1)" class="bg-gradient-to-r from-indigo-600 to-blue-600 text-white px-3 py-2 md:px-5 md:py-2.5 rounded-xl shadow-[0_4px_10px_-2px_rgba(79,70,229,0.5)] hover:from-indigo-700 hover:to-blue-700 font-bold text-xs md:text-sm transition-all active:scale-95 shrink-0"><span class="hidden md:inline">Next</span> <i class="fa-solid fa-chevron-right md:ml-2"></i></button>
+                    </div>
+                </div>
+                <div class="mt-6 md:mt-10 text-right">
+                    <button id="btn-to-step2" onclick="switchStep(2)" class="w-full sm:w-auto bg-gradient-to-r from-gray-800 to-gray-900 text-white px-6 py-3 md:px-8 md:py-3.5 rounded-full font-bold hover:shadow-lg transition-all active:scale-95 shadow-md flex items-center justify-center gap-2 ml-auto border border-gray-700 text-sm md:text-base">Next: Study Script <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- STEP 2: Study Script -->
+            <div id="step-2" class="glass-panel p-5 md:p-8 mb-6 hidden transition-all duration-500">
+                <div class="flex justify-between items-center mb-4 md:mb-6 border-b border-gray-100 pb-3 md:pb-4 gap-2">
+                    <h3 class="text-lg md:text-2xl font-black text-gray-800 flex items-center gap-2 md:gap-3"><span class="bg-gradient-to-br from-indigo-100 to-purple-100 text-indigo-600 w-8 h-8 md:w-10 md:h-10 rounded-xl flex items-center justify-center text-base md:text-lg shadow-inner border border-indigo-50"><i class="fa-solid fa-book-open"></i></span> Step 2: Script</h3>
+                    <span class="bg-indigo-50 text-indigo-600 text-[10px] md:text-xs font-black px-3 py-1 md:px-4 md:py-1.5 rounded-full tracking-widest uppercase shrink-0 border border-indigo-100 shadow-sm">2 of 3</span>
+                </div>
+                
+                <div class="bg-gradient-to-r from-amber-50 to-yellow-50/50 border border-amber-100 rounded-xl p-3 md:p-4 mb-4 md:mb-6 flex items-start gap-2 md:gap-3 shadow-sm">
+                    <i class="fa-solid fa-lightbulb text-amber-500 text-lg md:text-xl mt-0.5 drop-shadow-sm"></i>
+                    <p class="text-amber-800 text-xs md:text-sm leading-relaxed"><strong>Tip:</strong> Click on <strong>ANY word</strong> in the script to hear its pronunciation and see its syllables!</p>
+                </div>
+
+                <div class="space-y-2 text-sm md:text-lg leading-relaxed text-gray-700 bg-white p-4 md:p-6 rounded-2xl border border-gray-100 shadow-sm" id="script-content">
+                    <!-- Script dynamically injected here -->
+                </div>
+
+                <div class="mt-6 md:mt-10 flex flex-col-reverse sm:flex-row justify-between items-center gap-3 md:gap-4">
+                    <button onclick="switchStep(1)" class="w-full sm:w-auto text-gray-500 hover:text-gray-800 font-bold px-5 py-2.5 md:px-6 md:py-3 rounded-full hover:bg-gray-100 transition-colors active:scale-95 border border-transparent hover:border-gray-200 text-sm md:text-base"><i class="fa-solid fa-arrow-left mr-2"></i> Back</button>
+                    <button onclick="switchStep(3)" class="btn-shine w-full sm:w-auto bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 py-3.5 md:px-10 md:py-4 rounded-full font-black text-base md:text-lg hover:shadow-[0_10px_20px_-10px_rgba(16,185,129,0.8)] transition-all active:scale-95 flex items-center justify-center gap-2 md:gap-3 border border-emerald-400/30">
+                        <span class="relative z-10 flex items-center gap-2">Next: Record <i class="fa-solid fa-video"></i></span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 3: Video Recording -->
+            <div id="step-3" class="glass-panel p-5 md:p-8 hidden transition-all duration-500">
+                <div class="flex justify-between items-center mb-4 md:mb-6 border-b border-gray-100 pb-3 md:pb-4 gap-2">
+                    <h3 class="text-lg md:text-2xl font-black text-gray-800 flex items-center gap-2 md:gap-3"><span class="bg-gradient-to-br from-emerald-100 to-teal-100 text-emerald-600 w-8 h-8 md:w-10 md:h-10 rounded-xl flex items-center justify-center text-base md:text-lg shadow-inner border border-emerald-50"><i class="fa-solid fa-video"></i></span> Step 3: Record</h3>
+                    <span id="step3-badge" class="bg-emerald-50 text-emerald-600 text-[10px] md:text-xs font-black px-3 py-1 md:px-4 md:py-1.5 rounded-full tracking-widest uppercase shrink-0 border border-emerald-100 shadow-sm">3 of 3</span>
+                </div>
+                
+                <div class="bg-[#f4f7ff] border border-blue-100 rounded-2xl p-4 md:p-5 shadow-sm mb-6 md:mb-8">
+                    <div class="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
+                        <div class="bg-blue-200 text-blue-700 w-6 h-6 md:w-8 md:h-8 flex items-center justify-center rounded-full shadow-inner text-xs md:text-base">
+                            <i class="fa-solid fa-info"></i>
+                        </div>
+                        <h2 class="text-base md:text-lg font-bold text-blue-900">How to Record</h2>
+                    </div>
+                    
+                    <ul class="space-y-2 md:space-y-3 text-blue-800/80 font-bold text-xs md:text-sm ml-1">
+                        <li class="flex items-center gap-2 md:gap-3"><i class="fa-solid fa-circle-dot text-red-500 w-4 text-center"></i> <span><span class="text-blue-900">Click 'Start Recording'</span> to start</span></li>
+                        <li class="flex items-center gap-2 md:gap-3"><i class="fa-solid fa-microphone text-blue-500 w-4 text-center"></i> <span><span class="text-blue-900">Allow microphone</span> access</span></li>
+                        <li class="flex items-center gap-2 md:gap-3"><i class="fa-solid fa-mobile-screen text-blue-500 w-4 text-center"></i> <span><span class="text-blue-900">Keep screen ON</span> and stay on this page</span></li>
+                        <li class="flex items-center gap-2 md:gap-3"><i class="fa-solid fa-download text-blue-500 w-4 text-center"></i> <span><span class="text-blue-900">Download or share</span> your video!</span></li>
+                    </ul>
+                </div>
+
+                <div class="flex flex-col gap-6 md:gap-8 max-w-4xl mx-auto">
+                    <!-- Slides -->
+                    <div class="w-full">
+                        <div class="slide-container p-2 sm:p-4 bg-white" id="slide-display-record"></div>
+                        <div class="flex justify-between items-center mt-3 md:mt-4 bg-white border border-gray-100 p-1.5 md:p-2 rounded-2xl gap-2 shadow-sm">
+                            <button onclick="changeSlide(-1)" class="bg-gray-50 px-3 py-2 md:px-5 md:py-2.5 rounded-xl hover:bg-gray-100 font-bold text-gray-600 text-xs md:text-sm transition-colors active:scale-95 shrink-0 border border-transparent hover:border-gray-200"><i class="fa-solid fa-chevron-left md:mr-2"></i> <span class="hidden md:inline">Prev</span></button>
+                            
+                            <div class="flex flex-col items-center flex-1 text-center">
+                                <span class="text-xs md:text-sm font-bold text-gray-400 uppercase tracking-widest" id="slide-counter-record">Slide 1 / 3</span>
+                                <span class="text-[9px] md:text-[10px] text-rose-500 font-bold mt-1 bg-rose-50 px-2 py-0.5 rounded-full animate-pulse border border-rose-100"><i class="fa-solid fa-hand-pointer mr-1"></i> Remember to click Next!</span>
+                            </div>
+
+                            <button onclick="changeSlide(1)" class="bg-gradient-to-r from-indigo-600 to-blue-600 text-white px-3 py-2 md:px-5 md:py-2.5 rounded-xl shadow-[0_4px_10px_-2px_rgba(79,70,229,0.5)] hover:from-indigo-700 hover:to-blue-700 font-bold text-xs md:text-sm transition-all active:scale-95 shrink-0"><span class="hidden md:inline">Next</span> <i class="fa-solid fa-chevron-right md:ml-2"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Script -->
+                    <div id="script-reader-container" class="w-full bg-white border border-gray-200 rounded-2xl p-4 md:p-5 shadow-sm script-container-mask relative">
+                        <h4 class="text-[10px] md:text-xs font-black text-gray-400 uppercase tracking-widest mb-3 md:mb-4 flex items-center gap-2"><i class="fa-solid fa-file-lines text-indigo-400"></i> Your Script (Scrollable)</h4>
+                        <div class="h-40 md:h-48 overflow-y-auto script-scroll pr-3 md:pr-4 text-gray-700 text-sm md:text-base leading-relaxed space-y-3 md:space-y-4 pb-6 md:pb-8" id="script-reader"></div>
+                    </div>
+                    
+                    <!-- Record Controls -->
+                    <div id="record-container" class="w-full flex flex-col items-center bg-gradient-to-b from-gray-50 to-white p-6 md:p-8 rounded-3xl border border-gray-200 transition-all duration-300 relative overflow-hidden shadow-inner">
+                        <div class="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
+                            <span id="recording-indicator" class="w-2 h-2 md:w-3 md:h-3 bg-rose-500 rounded-full animate-pulse hidden shadow-[0_0_10px_rgba(244,63,94,0.8)]"></span>
+                            <div class="text-4xl md:text-5xl font-mono font-light text-gray-800 tracking-tight" id="timer">00:00</div>
+                        </div>
+                        
+                        <button id="btn-record" onclick="toggleRecording()" class="btn-shine bg-gradient-to-r from-rose-500 to-pink-600 text-white px-6 py-3.5 md:px-10 md:py-4 rounded-full font-black text-base md:text-xl hover:from-rose-600 hover:to-pink-700 transition-all active:scale-95 shadow-[0_10px_20px_-10px_rgba(244,63,94,0.6)] mb-2 w-full max-w-sm flex items-center justify-center gap-2 md:gap-3 z-10 border border-rose-400/30">
+                            <span class="relative z-10 flex items-center gap-2"><i class="fa-solid fa-video"></i> Start Recording</span>
+                        </button>
+                        
+                        <div id="download-area" class="mt-4 md:mt-6 hidden w-full max-w-md bg-white p-5 md:p-6 rounded-2xl border border-emerald-100 shadow-xl text-center z-10">
+                            <div class="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-emerald-100 to-teal-100 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4 text-xl md:text-2xl shadow-inner border border-emerald-50"><i class="fa-solid fa-check"></i></div>
+                            <h4 class="font-black text-gray-800 mb-3 md:mb-4 text-base md:text-lg">Video Saved Successfully!</h4>
+                            <!-- ADDED playsinline to video player -->
+                            <video id="presentation-video-player" playsinline webkit-playsinline controls class="w-full mb-4 md:mb-5 rounded-xl border border-gray-200 bg-black shadow-sm"></video>
+                            
+                            <div class="flex flex-col gap-2 md:gap-3">
+                                <button onclick="shareVideo()" class="flex items-center justify-center gap-2 w-full bg-[#25D366] text-white px-4 py-2.5 md:py-3.5 rounded-xl hover:bg-[#128C7E] transition-all active:scale-95 font-bold shadow-sm text-sm md:text-base">
+                                    <i class="fa-brands fa-whatsapp text-lg md:text-xl"></i> Share
+                                </button>
+                                <a id="download-link" class="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-gray-800 to-gray-900 text-white px-4 py-2.5 md:py-3 rounded-xl hover:shadow-lg transition-all active:scale-95 font-bold border border-gray-700 text-sm md:text-base">
+                                    <i class="fa-solid fa-download"></i> Save to Device
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 md:mt-10 pt-4 md:pt-6 flex justify-center border-t border-gray-100/50">
+                    <button id="btn-back-from-3" onclick="switchStep(2)" class="w-full sm:w-auto text-gray-500 hover:text-gray-800 font-bold px-5 py-2.5 md:px-6 md:py-3 rounded-full hover:bg-gray-100 transition-colors active:scale-95 border border-transparent hover:border-gray-200 text-sm md:text-base"><i class="fa-solid fa-arrow-left mr-2"></i> Back</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Navigation & Emojis ---
+        try {
+            const emojis = ['🎙️', '🗣️', '📝', '💡', '🎯', '📊', '🎤'];
+            const container = document.getElementById('emoji-container');
+            if (container) {
+                for(let i=0; i<15; i++) {
+                    let span = document.createElement('span');
+                    span.className = 'emoji';
+                    span.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                    span.style.left = Math.random() * 100 + 'vw';
+                    span.style.animationDuration = (Math.random() * 20 + 20) + 's'; 
+                    span.style.animationDelay = (Math.random() * 10) + 's';
+                    span.style.fontSize = (Math.random() * 1.2 + 1.2) + 'rem';
+                    container.appendChild(span);
+                }
+            }
+        } catch(e) { console.error("Emoji init error:", e); }
+
+        function transitionTo(elementId) {
+            try {
+                const currentActive = document.querySelector('.page.active');
+                if(currentActive && currentActive.id !== elementId) {
+                    currentActive.style.opacity = '0';
+                    currentActive.style.transform = 'translateY(15px)';
+                    setTimeout(() => {
+                        currentActive.classList.remove('active');
+                        const nextElement = document.getElementById(elementId);
+                        if(nextElement) {
+                            nextElement.classList.add('active');
+                            setTimeout(() => {
+                                nextElement.style.opacity = '1';
+                                nextElement.style.transform = 'translateY(0)';
+                                window.scrollTo(0,0);
+                            }, 50);
+                        }
+                    }, 300);
+                } else {
+                    const nextElement = document.getElementById(elementId);
+                    if(nextElement) {
+                        nextElement.classList.add('active');
+                        setTimeout(() => {
+                            nextElement.style.opacity = '1';
+                            nextElement.style.transform = 'translateY(0)';
+                            window.scrollTo(0,0);
+                        }, 50);
+                    }
+                }
+            } catch (e) { console.error("Transition error:", e); }
+        }
+
+        function startApp() {
+            try {
+                document.getElementById('main-nav').classList.remove('hidden');
+                transitionTo('page-menu');
+            } catch (e) { console.error("Start App error:", e); }
+        }
+        
+        function goToHome() {
+            try {
+                document.getElementById('main-nav').classList.add('hidden');
+                transitionTo('page-intro');
+            } catch (e) { console.error("Go Home error:", e); }
+        }
+        
+        function nav(pageId) {
+            stopTTS();
+            if (pageId === 'menu') transitionTo('page-menu');
+            else if (pageId === 'practice-menu') transitionTo('page-practice-menu');
+            else if (pageId === 'vocab-menu') transitionTo('page-vocab-menu');
+            else if (pageId === 'dates-game') {
+                document.getElementById('dates-instructions').classList.remove('hidden');
+                document.getElementById('dates-gameplay').classList.add('hidden');
+                transitionTo('page-dates-game');
+            }
+            else if (pageId === 'vocab-review') {
+                initVocabReview();
+            }
+            else if (pageId === 'vocab-game') transitionTo('page-vocab-game');
+            else if (pageId === 'mock-login') {
+                document.getElementById('mock-password').value = '';
+                document.getElementById('mock-error').classList.add('hidden');
+                transitionTo('page-mock-login');
+            }
+            else if (pageId === 'assessment') transitionTo('page-assessment');
+        }
+
+        function checkMockPassword() {
+            const pwd = document.getElementById('mock-password').value;
+            if(pwd === '3aIA') {
+                loadPaper('mock', 0);
+            } else {
+                document.getElementById('mock-error').classList.remove('hidden');
+            }
+        }
+
+        // ================= Vocab Hub Logic =================
+        
+        // --- 1. Dates & Months Game ---
+        const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const ordinals = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth", "eleventh", "twelfth", "thirteenth", "fourteenth", "fifteenth", "sixteenth", "seventeenth", "eighteenth", "nineteenth", "twentieth", "twenty-first", "twenty-second", "twenty-third", "twenty-fourth", "twenty-fifth", "twenty-sixth", "twenty-seventh", "twenty-eighth", "twenty-ninth", "thirtieth", "thirty-first"];
+        
+        const ordinalMap = {
+            "first": "1st", "second": "2nd", "third": "3rd", "fourth": "4th", "fifth": "5th",
+            "sixth": "6th", "seventh": "7th", "eighth": "8th", "ninth": "9th", "tenth": "10th",
+            "eleventh": "11th", "twelfth": "12th", "thirteenth": "13th", "fourteenth": "14th", "fifteenth": "15th",
+            "sixteenth": "16th", "seventeenth": "17th", "eighteenth": "18th", "nineteenth": "19th", "twentieth": "20th",
+            "twenty-first": "21st", "twenty-second": "22nd", "twenty-third": "23rd", "twenty-fourth": "24th", "twenty-fifth": "25th",
+            "twenty-sixth": "26th", "twenty-seventh": "27th", "twenty-eighth": "28th", "twenty-ninth": "29th", "thirtieth": "30th",
+            "thirty-first": "31st"
+        };
+
+        let currentDateTarget = "";
+        let currentDateSpoken = "";
+        let currentTargetDateNum = 0;
+        let speechRecog = null;
+        let isListeningDate = false;
+
+        try {
+            if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                speechRecog = new SpeechRecognition();
+                speechRecog.lang = 'en-GB';
+                speechRecog.interimResults = false;
+                speechRecog.maxAlternatives = 1;
+
+                speechRecog.onresult = function(event) {
+                    const transcript = event.results[0][0].transcript.toLowerCase().replace(/[.,!?]/g, '').trim();
+                    document.getElementById('date-speech-result').innerText = `You said: "${transcript}"`;
+                    checkDateSpeech(transcript);
+                };
+
+                speechRecog.onspeechend = function() { stopDateRecognition(); };
+                speechRecog.onerror = function(event) {
+                    document.getElementById('date-speech-result').innerText = `Error: ${event.error}. Please try again.`;
+                    stopDateRecognition();
+                };
+            }
+        } catch(e) { console.warn("Speech Recognition not supported", e); }
+
+        function startDatesGameplay() {
+            document.getElementById('dates-instructions').classList.add('hidden');
+            document.getElementById('dates-gameplay').classList.remove('hidden');
+            nextDateQuestion();
+        }
+
+        function nextDateQuestion() {
+            document.getElementById('date-speech-result').innerText = "Click the mic to speak...";
+            document.getElementById('date-verdict').classList.add('hidden');
+            
+            const dayIdx = Math.floor(Math.random() * 7);
+            const monthIdx = Math.floor(Math.random() * 12);
+            const dateIdx = Math.floor(Math.random() * 28); 
+
+            const dayName = days[dayIdx];
+            const shortDay = dayName.substring(0, 3);
+            const monthName = months[monthIdx];
+            const shortMonth = monthName.substring(0, 3);
+            currentTargetDateNum = dateIdx + 1;
+            const ordinal = ordinals[dateIdx];
+
+            currentDateTarget = `${shortDay}, ${currentTargetDateNum} ${shortMonth}`; 
+            currentDateSpoken = `${dayName}, the ${ordinal} of ${monthName}`;
+
+            document.getElementById('date-display').innerText = currentDateTarget;
+        }
+
+        function playDateTTS() { 
+            speakText(currentDateSpoken, 'date-accent-select', 'date-speed-select'); 
+        }
+
+        function toggleDateRecognition() {
+            if (!speechRecog) {
+                alert("Speech recognition is not supported in this browser. Please use Chrome, Edge, or Safari.");
+                return;
+            }
+            if (isListeningDate) {
+                stopDateRecognition();
+            } else {
+                document.getElementById('date-speech-result').innerText = "Listening...";
+                document.getElementById('date-verdict').classList.add('hidden');
+                document.getElementById('btn-date-mic').classList.add('listening-active');
+                try { speechRecog.start(); isListeningDate = true; } catch(e) { console.error(e); }
+            }
+        }
+
+        function stopDateRecognition() {
+            if(speechRecog) speechRecog.stop();
+            isListeningDate = false;
+            document.getElementById('btn-date-mic').classList.remove('listening-active');
+        }
+
+        function checkDateSpeech(transcript) {
+            let rawWords = currentDateSpoken.toLowerCase().replace(/[,]/g, '').split(' ');
+            const targetWords = rawWords.filter(w => w !== 'the' && w !== 'of');
+            
+            let matchCount = 0;
+            let missedWords = [];
+
+            targetWords.forEach(word => {
+                let isMatch = false;
+                if (transcript.includes(word)) {
+                    isMatch = true;
+                } 
+                else if (word.includes('-') && transcript.includes(word.replace('-', ' '))) {
+                    isMatch = true;
+                }
+                else if (ordinalMap[word] && transcript.includes(ordinalMap[word])) {
+                    isMatch = true;
+                }
+                
+                if (isMatch) {
+                    matchCount++;
+                } else {
+                    missedWords.push(word);
+                }
+            });
+
+            const percentage = Math.round((matchCount / targetWords.length) * 100);
+            const verdictEl = document.getElementById('date-verdict');
+            verdictEl.classList.remove('hidden');
+
+            if (percentage === 100) {
+                verdictEl.innerHTML = `<div class="text-emerald-500 font-black"><i class="fa-solid fa-circle-check"></i> Excellent! 100% Accurate!</div>`;
+            } else {
+                verdictEl.innerHTML = `
+                    <div class="text-rose-500 font-bold mb-1"><i class="fa-solid fa-circle-xmark"></i> Accuracy: ${percentage}%</div>
+                    <div class="text-sm text-gray-500 mb-2">Target: "${currentDateSpoken}"</div>
+                    <div class="text-sm text-rose-700 bg-rose-50 inline-block px-3 py-1.5 rounded-lg border border-rose-100 shadow-inner">
+                        Needs improvement on: <b class="font-black">${missedWords.join(', ')}</b>
+                    </div>
+                `;
+            }
+        }
+
+        // --- 2. Advanced Vocab Game (Workplace Context & UK Spelling) ---
+        const advancedVocabBank = [
+            { word: "ad hoc", pos: "adjective", meaning: "特派的", hint: "Unit 5", example: "The manager formed an ad hoc committee to handle the sudden supply chain crisis." },
+            { word: "adequate", pos: "adjective", meaning: "足夠的", hint: "Unit 8", example: "Ensure we have adequate funding before launching the new marketing campaign." },
+            { word: "adverse", pos: "adjective", meaning: "不利的", hint: "Unit 2", example: "The adverse economic conditions have negatively impacted our quarterly sales." },
+            { word: "attractive", pos: "adjective", meaning: "有吸引力的", hint: "Unit 5", example: "The company provides an attractive remuneration package to retain top talent." },
+            { word: "cautious", pos: "adjective", meaning: "小心的", hint: "Unit 6", example: "The board of directors is cautious about investing in unproven technologies." },
+            { word: "competent", pos: "adjective", meaning: "能幹的", hint: "Unit 10", example: "We need a highly competent IT technician to upgrade our server infrastructure." },
+            { word: "complimentary", pos: "adjective", meaning: "贈送的", hint: "Unit 2", example: "We offer complimentary consultation services to all our new corporate clients." },
+            { word: "comprehensive", pos: "adjective", meaning: "全面的", hint: "Unit 3", example: "The HR department has prepared a comprehensive training manual for new recruits." },
+            { word: "corporate", pos: "adjective", meaning: "公司的", hint: "Unit 4", example: "Our corporate strategy focuses on expanding into the European market next year." },
+            { word: "dedicated", pos: "adjective", meaning: "專注的", hint: "Unit 3, 5", example: "We have a dedicated customer service team to handle client enquiries." },
+            { word: "designated", pos: "adjective", meaning: "指定的", hint: "Unit 10", example: "Please park your company vehicle in the designated staff parking area." },
+            { word: "dilated", pos: "adjective", meaning: "擴大", hint: "Unit 9", example: "The occupational health nurse noticed his dilated pupils and suggested immediate medical leave." },
+            { word: "eco-friendly", pos: "adjective", meaning: "環保的", hint: "Unit 5, 12", example: "The office has switched to eco-friendly printing paper to reduce our carbon footprint." },
+            { word: "economical", pos: "adjective", meaning: "經濟的", hint: "Unit 13", example: "We need to find a more economical supplier for our raw materials to maximise profit." },
+            { word: "efficient", pos: "adjective", meaning: "有效率的", hint: "Unit 8, 13", example: "The new inventory software is highly efficient and saves the team hours of manual data entry." },
+            { word: "eligible", pos: "adjective", meaning: "合資格的", hint: "Unit 3", example: "Employees who have completed their probation are eligible for the annual bonus." },
+            { word: "environmental", pos: "adjective", meaning: "自然環境的", hint: "Unit 12", example: "The factory must comply with strict environmental regulations to avoid hefty fines." },
+            { word: "existing", pos: "adjective", meaning: "現存的", hint: "Unit 10", example: "We need to review our existing contracts before negotiating with the new vendors." },
+            { word: "flexible", pos: "adjective", meaning: "靈活的", hint: "Unit 11", example: "Our company offers flexible working hours to promote a better work-life balance." },
+            { word: "genuine", pos: "adjective", meaning: "真正的", hint: "Unit 13", example: "The client expressed a genuine interest in our newly proposed software solutions." },
+            { word: "hectic", pos: "adjective", meaning: "繁忙的", hint: "Unit 11", example: "The finance department always faces a hectic schedule during the end-of-year audit." },
+            { word: "identical", pos: "adjective", meaning: "完全相同的", hint: "Unit 11", example: "The two draft proposals are almost identical, so we only need to submit one to the director." },
+            { word: "insufficient", pos: "adjective", meaning: "不足的", hint: "Unit 2", example: "The project was delayed due to insufficient manpower in the engineering department." },
+            { word: "interactive", pos: "adjective", meaning: "互動的", hint: "Unit 4, 8", example: "The trainer used an interactive presentation to keep the staff engaged during the workshop." },
+            { word: "inter-departmental", pos: "adjective", meaning: "部門之間的", hint: "Unit 5", example: "We have scheduled an inter-departmental meeting to resolve the communication issues." },
+            { word: "marginal", pos: "adjective", meaning: "邊緣的", hint: "Unit 4", example: "The new marketing strategy only resulted in a marginal increase in our quarterly revenue." },
+            { word: "outstanding", pos: "adjective", meaning: "出色的", hint: "Unit 6", example: "The CEO praised the sales team for their outstanding performance this quarter." },
+            { word: "permanent", pos: "adjective", meaning: "永久的", hint: "Unit 10", example: "After a successful six-month probation, Sarah was offered a permanent contract." },
+            { word: "portable", pos: "adjective", meaning: "手提式的", hint: "Unit 6", example: "The sales representatives are equipped with portable projectors for client presentations." },
+            { word: "potential", pos: "adjective", meaning: "有潛力的", hint: "Unit 2, 11", example: "The marketing team is conducting research to identify potential markets in Asia." },
+            { word: "proactive", pos: "adjective", meaning: "主動的", hint: "Unit 4", example: "Managers should take a proactive approach to resolving workplace conflicts." },
+            { word: "professional", pos: "adjective", meaning: "專業的", hint: "Unit 5", example: "Please ensure that all email correspondence with clients maintains a professional tone." },
+            { word: "prolonged", pos: "adjective", meaning: "長期的", hint: "Unit 9", example: "Prolonged use of computer screens can lead to eye strain among office workers." },
+            { word: "reliable", pos: "adjective", meaning: "可靠的", hint: "Unit 5, 8, 13", example: "We need to source a reliable logistics partner to ensure timely delivery of our goods." },
+            { word: "renowned", pos: "adjective", meaning: "著名的", hint: "Unit 3", example: "Our firm hired a renowned consultant to restructure the management system." },
+            { word: "respective", pos: "adjective", meaning: "各自的", hint: "Unit 12", example: "After the general briefing, staff should return to their respective departments." },
+            { word: "restrictive", pos: "adjective", meaning: "限制的", hint: "Unit 10", example: "The new company policy is too restrictive and limits creative problem-solving." },
+            { word: "self-help", pos: "adjective", meaning: "自助的", hint: "Unit 8", example: "We have set up a self-help portal on the intranet for staff to reset their passwords." },
+            { word: "state-of-the-art", pos: "adjective", meaning: "最先進的", hint: "Unit 3", example: "Our new headquarters features a state-of-the-art conference room for global meetings." },
+            { word: "statutory", pos: "adjective", meaning: "法定的", hint: "Unit 10", example: "The HR manager reminded everyone about the statutory requirements for maternity leave." },
+            { word: "supplementary", pos: "adjective", meaning: "補充的", hint: "Unit 11", example: "The finance team provided supplementary documents to support the annual budget request." },
+            { word: "technical", pos: "adjective", meaning: "技術的", hint: "Unit 2", example: "The IT support desk is available 24/7 to resolve any technical issues with your workstation." },
+            { word: "temporary", pos: "adjective", meaning: "臨時的", hint: "Unit 2, 10", example: "We have hired a temporary receptionist to cover the front desk during the summer holidays." },
+            { word: "unique", pos: "adjective", meaning: "獨一無二的", hint: "Unit 3, 13", example: "Our software offers a unique feature that sets us apart from other competitors in the market." },
+            { word: "upcoming", pos: "adjective", meaning: "即將來臨的", hint: "Unit 5", example: "The agenda for the upcoming board meeting has been circulated to all directors." },
+            { word: "user-friendly", pos: "adjective", meaning: "容易使用的", hint: "Unit 12", example: "The new accounting software is highly user-friendly and requires minimal staff training." },
+            { word: "valuable", pos: "adjective", meaning: "有價值的", hint: "Unit 4", example: "The senior analyst provided valuable insights that helped us secure the major contract." },
+            { word: "widespread", pos: "adjective", meaning: "廣泛的", hint: "Unit 4", example: "There is widespread support among the staff for the new flexible working arrangement." },
+            { word: "worldwide", pos: "adjective", meaning: "遍及全球的", hint: "Unit 12", example: "Our logistics network ensures that products can be shipped to clients worldwide." },
+            { word: "automatically", pos: "adverb", meaning: "自動地", hint: "Unit 8, 13", example: "The payroll system automatically calculates the overtime pay for all eligible employees." },
+            { word: "marginally", pos: "adverb", meaning: "稍微", hint: "Unit 13", example: "Our production costs have increased marginally due to the recent rise in fuel prices." },
+            { word: "markedly", pos: "adverb", meaning: "顯著地", hint: "Unit 12", example: "The team's productivity improved markedly after the implementation of the new workflow." },
+            { word: "periodically", pos: "adverb", meaning: "定期地", hint: "Unit 13", example: "The safety equipment in the warehouse must be inspected periodically to ensure compliance." },
+            { word: "properly", pos: "adverb", meaning: "正確地", hint: "Unit 8", example: "Please ensure that all confidential client files are properly shredded before disposal." },
+            { word: "respectively", pos: "adverb", meaning: "各自地", hint: "Unit 12", example: "The CEO and CFO will address the marketing and finance issues respectively." },
+            { word: "satisfactorily", pos: "adverb", meaning: "令人滿意地", hint: "Unit 11", example: "The contractor completed the office renovation satisfactorily and within the agreed timeframe." },
+            { word: "securely", pos: "adverb", meaning: "安全地", hint: "Unit 8", example: "Ensure that all sensitive company data is securely backed up on the cloud server." },
+            { word: "sharply", pos: "adverb", meaning: "急劇地", hint: "Unit 12", example: "Our quarterly profits dropped sharply due to the unexpected supply chain disruptions." },
+            { word: "significantly", pos: "adverb", meaning: "重大地", hint: "Unit 11", example: "The new automated machinery has significantly reduced our manufacturing time." },
+            { word: "simultaneously", pos: "adverb", meaning: "同時地", hint: "Unit 3", example: "The project manager is handling three major client accounts simultaneously." },
+            { word: "slightly", pos: "adverb", meaning: "輕微地", hint: "Unit 12", example: "The launch date of the new product has been slightly delayed due to quality control checks." },
+            { word: "steadily", pos: "adverb", meaning: "平穩地", hint: "Unit 12", example: "Our market share in the Asian region has been growing steadily over the past three years." },
+            { word: "tightly", pos: "adverb", meaning: "緊湊地", hint: "Unit 12", example: "The project schedule is tightly packed, leaving no room for unexpected delays." },
+            { word: "appreciation", pos: "noun", meaning: "欣賞", hint: "Unit 2, 3", example: "The management organised a dinner to show their appreciation for the staff's hard work." },
+            { word: "availability", pos: "noun", meaning: "可用性", hint: "Unit 4, 5", example: "Please check the availability of the conference room before scheduling the client meeting." },
+            { word: "awareness", pos: "noun", meaning: "意識", hint: "Unit 4", example: "The marketing campaign aims to raise brand awareness among young professionals." },
+            { word: "blade", pos: "noun", meaning: "刀片", hint: "Unit 9", example: "The maintenance worker replaced the worn blade on the industrial cutting machine." },
+            { word: "blood circulation", pos: "noun", meaning: "血液循環", hint: "Unit 9", example: "Ergonomic office chairs are designed to promote good posture and healthy blood circulation." },
+            { word: "broadcast", pos: "noun", meaning: "廣播", hint: "Unit 2", example: "The CEO's annual speech will be a live broadcast to all international branch offices." },
+            { word: "category", pos: "noun", meaning: "類別", hint: "Unit 6", example: "The business expenses should be sorted into the correct category for tax purposes." },
+            { word: "charity", pos: "noun", meaning: "慈善機構", hint: "Unit 3", example: "Our corporation donates five percent of its annual profits to a local charity." },
+            { word: "checkpoint", pos: "noun", meaning: "檢查站", hint: "Unit 6", example: "The project manager established several checkpoints to monitor the team's progress." },
+            { word: "commitment", pos: "noun", meaning: "承擔", hint: "Unit 4, 6", example: "The supplier demonstrated a strong commitment to delivering the materials on time." },
+            { word: "companion", pos: "noun", meaning: "同伴", hint: "Unit 3", example: "The senior executive brought a legal companion to advise him during the merger negotiations." },
+            { word: "concern", pos: "noun", meaning: "關注", hint: "Unit 11, 12, 13", example: "The sudden drop in sales is a major concern for the board of directors." },
+            { word: "consideration", pos: "noun", meaning: "考慮", hint: "Unit 12", example: "Your proposal for a budget increase will be taken into consideration at the next meeting." },
+            { word: "constraint", pos: "noun", meaning: "限制", hint: "Unit 10, 12", example: "Due to budget constraints, we cannot hire any additional freelance designers this quarter." },
+            { word: "consultation", pos: "noun", meaning: "諮詢", hint: "Unit 11", example: "The HR department held a consultation with staff regarding the new health insurance policy." },
+            { word: "consumption", pos: "noun", meaning: "消耗量", hint: "Unit 12", example: "The factory aims to reduce its energy consumption by upgrading to efficient machinery." },
+            { word: "contractor", pos: "noun", meaning: "承包商", hint: "Unit 5", example: "We hired an independent contractor to manage the installation of the new server racks." },
+            { word: "coordination", pos: "noun", meaning: "協調", hint: "Unit 4", example: "Successfully launching the product requires close coordination between marketing and sales." },
+            { word: "coordinator", pos: "noun", meaning: "協調者", hint: "Unit 6", example: "The logistics coordinator is responsible for tracking all incoming and outgoing shipments." },
+            { word: "coverage", pos: "noun", meaning: "覆蓋範圍", hint: "Unit 11", example: "Our corporate insurance policy provides comprehensive coverage for all business travel." },
+            { word: "decade", pos: "noun", meaning: "十年", hint: "Unit 5", example: "Our firm has been the leading provider of accounting software for over a decade." },
+            { word: "disadvantage", pos: "noun", meaning: "不利條件", hint: "Unit 3, 4", example: "One major disadvantage of the proposed location is its distance from our main suppliers." },
+            { word: "disruption", pos: "noun", meaning: "中斷", hint: "Unit 2", example: "The IT department scheduled the server maintenance at midnight to minimise business disruption." },
+            { word: "disturbance", pos: "noun", meaning: "干擾", hint: "Unit 2, 6", example: "Please keep your phones on silent to avoid causing a disturbance during the presentation." },
+            { word: "diversion", pos: "noun", meaning: "轉向", hint: "Unit 2", example: "The sudden budget cuts forced a diversion of funds away from the research department." },
+            { word: "duty roster", pos: "noun", meaning: "值勤表", hint: "Unit 5", example: "The shift manager will post the new duty roster on the staff noticeboard every Friday." },
+            { word: "early bird discount", pos: "noun", meaning: "早鳥優惠", hint: "Unit 6", example: "We offer an early bird discount to corporate clients who renew their annual software licences in advance." },
+            { word: "effectiveness", pos: "noun", meaning: "效能", hint: "Unit 3", example: "The management is evaluating the effectiveness of the recent staff training programme." },
+            { word: "emergency", pos: "noun", meaning: "緊急情況", hint: "Unit 2", example: "All employees must know the location of the fire exits in case of a workplace emergency." },
+            { word: "enrolment", pos: "noun", meaning: "登記", hint: "Unit 6", example: "The HR department announced that enrolment for the advanced leadership workshop is now open." },
+            { word: "entertainment", pos: "noun", meaning: "娛樂節目", hint: "Unit 6", example: "The company allocated a specific budget for client entertainment and business dinners." },
+            { word: "expenditure", pos: "noun", meaning: "支出", hint: "Unit 12", example: "We need to reduce our operational expenditure to maintain profitability this quarter." },
+            { word: "exposure", pos: "noun", meaning: "暴露", hint: "Unit 3, 9", example: "Sponsoring the industry conference will give our brand excellent exposure to potential clients." },
+            { word: "fatigue", pos: "noun", meaning: "疲勞", hint: "Unit 9", example: "To prevent driver fatigue, the logistics company strictly limits the driving hours of its staff." },
+            { word: "feature", pos: "noun", meaning: "特徵", hint: "Unit 13", example: "The standout feature of our new software is its seamless integration with existing databases." },
+            { word: "flexibility", pos: "noun", meaning: "靈活性", hint: "Unit 10", example: "The new cloud-based system offers greater flexibility for employees working from home." },
+            { word: "fringe benefit", pos: "noun", meaning: "福利", hint: "Unit 10", example: "Comprehensive medical insurance is a highly valued fringe benefit for our employees." },
+            { word: "fundraising", pos: "noun", meaning: "籌款", hint: "Unit 3", example: "The corporate social responsibility team is organising a fundraising gala for local charities." },
+            { word: "campaign", pos: "noun", meaning: "運動", hint: "Unit 3", example: "The marketing team is launching a new digital campaign to promote our latest product line." },
+            { word: "grievance", pos: "noun", meaning: "抱怨", hint: "Unit 10, 11", example: "The HR department has a formal procedure for handling any workplace grievance." },
+            { word: "hazard", pos: "noun", meaning: "危險", hint: "Unit 9", example: "Exposed electrical wires are a serious safety hazard in the manufacturing plant." },
+            { word: "hospitalisation", pos: "noun", meaning: "住院治療", hint: "Unit 11", example: "The company's health insurance policy covers full hospitalisation costs for all permanent staff." },
+            { word: "identification", pos: "noun", meaning: "身分證明", hint: "Unit 13", example: "All staff must wear their corporate identification badges while on the company premises." },
+            { word: "illustration", pos: "noun", meaning: "圖解", hint: "Unit 13", example: "The consultant provided a clear illustration of how the new workflow would increase efficiency." },
+            { word: "implementation", pos: "noun", meaning: "實施", hint: "Unit 10", example: "The implementation of the new cybersecurity protocols will begin next Monday." },
+            { word: "impression", pos: "noun", meaning: "印象", hint: "Unit 6", example: "Dressing professionally for a client meeting helps to create a positive first impression." },
+            { word: "inconvenience", pos: "noun", meaning: "不便之處", hint: "Unit 2", example: "We apologise for any inconvenience caused by the temporary suspension of our online portal." },
+            { word: "inflation", pos: "noun", meaning: "通貨膨脹", hint: "Unit 10", example: "The company adjusted the annual salary increments to keep pace with the rising rate of inflation." },
+            { word: "initiative", pos: "noun", meaning: "主動性", hint: "Unit 3, 4", example: "The junior analyst took the initiative to streamline the data collection process." },
+            { word: "intern", pos: "noun", meaning: "實習生", hint: "Unit 8", example: "Our marketing department hired a university intern to assist with the social media strategy." },
+            { word: "irritation", pos: "noun", meaning: "過敏", hint: "Unit 9", example: "The harsh cleaning chemicals used in the factory caused skin irritation among the workers." },
+            { word: "limb", pos: "noun", meaning: "四肢", hint: "Unit 9", example: "The factory worker wore protective gear to prevent injuries to his limbs while operating heavy machinery." },
+            { word: "logistics", pos: "noun", meaning: "物流", hint: "Unit 5", example: "The operations manager is reviewing the logistics for distributing products to our overseas branches." },
+            { word: "maintenance", pos: "noun", meaning: "維修", hint: "Unit 9", example: "Routine maintenance of the office printers will be carried out this Friday afternoon." },
+            { word: "merit", pos: "noun", meaning: "長處﹐優點", hint: "Unit 13", example: "The committee will evaluate each vendor's proposal based on its own financial and technical merit." },
+            { word: "motivation", pos: "noun", meaning: "動力", hint: "Unit 4", example: "Offering performance-based bonuses is an effective way to increase staff motivation." },
+            { word: "notification", pos: "noun", meaning: "通知", hint: "Unit 3", example: "Staff will receive an email notification once their annual leave request has been approved." },
+            { word: "occupational therapist", pos: "noun", meaning: "職業治療師", hint: "Unit 9", example: "The company hired an occupational therapist to assess the ergonomics of our office workstations." },
+            { word: "orientation", pos: "noun", meaning: "迎新", hint: "Unit 8", example: "All new hires are required to attend a full-day orientation session on corporate policies." },
+            { word: "popularity", pos: "noun", meaning: "聲望", hint: "Unit 11, 12", example: "The new remote working policy has gained immense popularity among the employees." },
+            { word: "positioning", pos: "noun", meaning: "位置", hint: "Unit 13", example: "The strategic positioning of our brand in the luxury market has significantly boosted our profit margins." },
+            { word: "posture", pos: "noun", meaning: "姿勢", hint: "Unit 9", example: "Maintaining a correct posture at your desk helps prevent back pain during long working hours." },
+            { word: "priority", pos: "noun", meaning: "優先考慮的事", hint: "Unit 13", example: "Securing the contract with the international supplier is our top priority this quarter." },
+            { word: "provision", pos: "noun", meaning: "供應", hint: "Unit 2, 12", example: "The contract includes a provision for early termination if the service standards are not met." },
+            { word: "qualification", pos: "noun", meaning: "資格", hint: "Unit 10", example: "A master's degree in finance is a required qualification for the senior auditor position." },
+            { word: "ranking", pos: "noun", meaning: "排行", hint: "Unit 6", example: "Our firm has achieved a top-tier ranking in the annual corporate sustainability index." },
+            { word: "rationale", pos: "noun", meaning: "理據", hint: "Unit 10", example: "The CEO explained the rationale behind the decision to merge with our biggest competitor." },
+            { word: "recruitment", pos: "noun", meaning: "招聘", hint: "Unit 4, 5", example: "The HR department is launching a new recruitment drive to hire fifty software engineers." },
+            { word: "refreshment", pos: "noun", meaning: "茶點", hint: "Unit 6", example: "Light refreshments will be provided in the boardroom during the afternoon strategy session." },
+            { word: "registration", pos: "noun", meaning: "登記﹐註冊", hint: "Unit 6, 13", example: "Please complete your online registration for the annual industry conference by Friday." },
+            { word: "reimbursement", pos: "noun", meaning: "報銷", hint: "Unit 11", example: "Please submit your taxi receipts to the finance department for travel expense reimbursement." },
+            { word: "representative", pos: "noun", meaning: "代表", hint: "Unit 5", example: "Our sales representative will visit your office next week to demonstrate the new software." },
+            { word: "reputation", pos: "noun", meaning: "名譽﹐名望", hint: "Unit 4", example: "The firm has built a solid reputation for delivering high-quality architectural designs." },
+            { word: "response", pos: "noun", meaning: "反應", hint: "Unit 4, 11", example: "We received a very positive response from clients regarding our newly launched mobile app." },
+            { word: "risk", pos: "noun", meaning: "風險", hint: "Unit 13", example: "The compliance team conducted an audit to minimise the financial risk of the new venture." },
+            { word: "satisfaction", pos: "noun", meaning: "滿足", hint: "Unit 10", example: "Ensuring high customer satisfaction is crucial for maintaining our market leadership." },
+            { word: "schedule", pos: "noun", meaning: "時間表", hint: "Unit 11", example: "The project manager circulated the updated schedule for the upcoming software deployment." },
+            { word: "sensation", pos: "noun", meaning: "感覺", hint: "Unit 9", example: "The worker reported a tingling sensation in his wrist due to repetitive typing tasks." },
+            { word: "specialist", pos: "noun", meaning: "專家", hint: "Unit 11", example: "We need to consult an IT security specialist to protect our corporate network from cyber attacks." },
+            { word: "stowage", pos: "noun", meaning: "載貨空間", hint: "Unit 2", example: "The warehouse supervisor reorganised the stowage area to accommodate the new inventory." },
+            { word: "strain", pos: "noun", meaning: "勞損", hint: "Unit 9", example: "The sudden influx of customer orders put a massive strain on our delivery department." },
+            { word: "stuff", pos: "noun", meaning: "物品", hint: "Unit 5", example: "Please clear your personal stuff from the hot-desking area at the end of your shift." },
+            { word: "suspension", pos: "noun", meaning: "暫停", hint: "Unit 2", example: "The breach of safety protocols resulted in the immediate suspension of the factory worker." },
+            { word: "token", pos: "noun", meaning: "象徵", hint: "Unit 2", example: "The company gave each employee a gift voucher as a token of appreciation for their hard work." },
+            { word: "transmission", pos: "noun", meaning: "傳送", hint: "Unit 8", example: "The IT department uses encrypted channels for the secure transmission of sensitive client data." },
+            { word: "trial", pos: "noun", meaning: "試用", hint: "Unit 10", example: "The software company offered us a free 30-day trial of their premium project management tool." },
+            { word: "trunk", pos: "noun", meaning: "軀幹", hint: "Unit 9", example: "The ergonomics expert advised the warehouse staff to keep their trunk straight when lifting heavy boxes." },
+            { word: "turnover", pos: "noun", meaning: "人事變動率", hint: "Unit 10, 11", example: "Offering better fringe benefits has significantly reduced our staff turnover rate." },
+            { word: "utilisation", pos: "noun", meaning: "使用", hint: "Unit 11", example: "The operations manager aims to maximise the utilisation of our warehouse space." },
+            { word: "verification", pos: "noun", meaning: "確認", hint: "Unit 13", example: "The bank requires strict verification of all corporate documents before approving the business loan." },
+            { word: "access", pos: "verb", meaning: "進入", hint: "Unit 13", example: "Only senior management can access the highly confidential financial records." },
+            { word: "adopt", pos: "verb", meaning: "採用", hint: "Unit 13", example: "The board decided to adopt a more aggressive marketing strategy for the upcoming quarter." },
+            { word: "accommodate", pos: "verb", meaning: "容納", hint: "Unit 5", example: "The new office layout is designed to accommodate our rapidly expanding sales team." },
+            { word: "address", pos: "verb", meaning: "向…發表演說", hint: "Unit 3", example: "The CEO will address the shareholders' concerns during the annual general meeting." },
+            { word: "adjust", pos: "verb", meaning: "調整", hint: "Unit 8", example: "We need to adjust our pricing strategy to remain competitive in the current market." },
+            { word: "align", pos: "verb", meaning: "對齊", hint: "Unit 8", example: "The new marketing campaign must align with our overall corporate objectives." },
+            { word: "alleviate", pos: "verb", meaning: "減輕", hint: "Unit 9", example: "Hiring more customer support staff will help alleviate the heavy workload during peak seasons." },
+            { word: "analyse", pos: "verb", meaning: "分析", hint: "Unit 11", example: "The data team will analyse the latest consumer trends to guide our product development." },
+            { word: "apologise", pos: "verb", meaning: "道歉", hint: "Unit 2", example: "We sincerely apologise for the delay in processing your recent bulk order." },
+            { word: "arise", pos: "verb", meaning: "形成", hint: "Unit 8", example: "Should any technical issues arise during the presentation, the IT team will be on standby." },
+            { word: "associate", pos: "verb", meaning: "聯想起來", hint: "Unit 9", example: "Consumers strongly associate our brand with high-quality customer service." },
+            { word: "concentrate", pos: "verb", meaning: "專注", hint: "Unit 5", example: "The open-plan office can sometimes make it difficult for staff to concentrate on complex tasks." },
+            { word: "co-organise", pos: "verb", meaning: "合辦", hint: "Unit 6", example: "Our firm will co-organise the annual industry trade show with the local commerce chamber." },
+            { word: "demonstrate", pos: "verb", meaning: "示範", hint: "Unit 5", example: "The software engineer will demonstrate the new features of the application to the client." },
+            { word: "disqualify", pos: "verb", meaning: "被取消資格", hint: "Unit 6", example: "Failing to submit the tender documents on time will automatically disqualify your company from the bidding process." },
+            { word: "engage", pos: "verb", meaning: "參加", hint: "Unit 4", example: "We need to engage a professional PR firm to handle the upcoming product launch." },
+            { word: "enhance", pos: "verb", meaning: "促進", hint: "Unit 3", example: "Upgrading our server infrastructure will significantly enhance our network security." },
+            { word: "entitle", pos: "verb", meaning: "享有", hint: "Unit 3", example: "Senior executives are entitled to fly business class for all overseas corporate travel." },
+            { word: "erase", pos: "verb", meaning: "刪除", hint: "Unit 8", example: "Please ensure you securely erase all client data from the hard drives before disposing of the old computers." },
+            { word: "fake", pos: "verb", meaning: "假裝, 偽造", hint: "Unit 13", example: "The auditor discovered that the supplier had submitted fake invoices to inflate their expenses." },
+            { word: "familiarise", pos: "verb", meaning: "使….熟悉", hint: "Unit 6", example: "New employees should familiarise themselves with the company's internal communication software." },
+            { word: "flip", pos: "verb", meaning: "翻動", hint: "Unit 12", example: "The presenter flipped through the slides quickly to leave more time for the Q&A session." },
+            { word: "fulfil", pos: "verb", meaning: "滿足", hint: "Unit 6", example: "The logistics team worked overtime to fulfil the massive surge in online orders." },
+            { word: "gain", pos: "verb", meaning: "獲得", hint: "Unit 4, 6", example: "The start-up managed to gain a significant market share within its first year of operation." },
+            { word: "initiate", pos: "verb", meaning: "發起", hint: "Unit 3, 4", example: "The HR manager will initiate a review of the current employee benefits package." },
+            { word: "insert", pos: "verb", meaning: "放進", hint: "Unit 8, 12", example: "Please insert your corporate security card into the terminal to access the server room." },
+            { word: "interfere", pos: "verb", meaning: "干擾", hint: "Unit 2", example: "The ongoing construction noise is starting to interfere with our daily office operations." },
+            { word: "lay off", pos: "verb", meaning: "解僱", hint: "Unit 10", example: "Due to the economic downturn, the company was forced to lay off twenty percent of its workforce." },
+            { word: "lift", pos: "verb", meaning: "舉起, 抬起", hint: "Unit 8", example: "Warehouse staff are trained to use mechanical hoists to lift heavy pallets safely." },
+            { word: "minimise", pos: "verb", meaning: "減至最小", hint: "Unit 2", example: "We must implement strict quality control to minimise the risk of defective products." },
+            { word: "nominate", pos: "verb", meaning: "提名", hint: "Unit 5", example: "The department head decided to nominate Sarah for the Employee of the Year award." },
+            { word: "recognise", pos: "verb", meaning: "表揚", hint: "Unit 4", example: "The management held a special ceremony to recognise the outstanding achievements of the sales team." },
+            { word: "recruit", pos: "verb", meaning: "招聘", hint: "Unit 4, 5", example: "Our agency was hired to recruit top-tier software developers for the tech giant." },
+            { word: "retrieve", pos: "verb", meaning: "取回", hint: "Unit 8", example: "The archivist was able to retrieve the original signed contracts from the off-site storage facility." },
+            { word: "reveal", pos: "verb", meaning: "展現﹐顯露", hint: "Unit 9", example: "The financial audit revealed several discrepancies in the quarterly expense reports." },
+            { word: "simplify", pos: "verb", meaning: "簡化", hint: "Unit 8", example: "We need to simplify the online checkout process to reduce the cart abandonment rate." },
+            { word: "strengthen", pos: "verb", meaning: "加強", hint: "Unit 4, 10", example: "The merger will significantly strengthen our position in the global telecommunications market." },
+            { word: "stretch", pos: "verb", meaning: "伸展", hint: "Unit 9", example: "The marketing budget will not stretch far enough to cover a national television campaign." },
+            { word: "tap", pos: "verb", meaning: "輕敲", hint: "Unit 8", example: "We plan to tap into the emerging markets in Southeast Asia to boost our export sales." },
+            { word: "waive", pos: "verb", meaning: "豁免", hint: "Unit 3", example: "The supplier agreed to waive the delivery charges for our bulk order of office furniture." }
+        ];
+
+        let vocabQuestions = [];
+        let currentVocabIndex = 0;
+        let vocabScore = 0;
+        let errorWords = [];
+
+        // Load errors from localStorage
+        try {
+            const stored = localStorage.getItem('speakup_vocab_errors');
+            if (stored) errorWords = JSON.parse(stored);
+        } catch(e) { console.log("LocalStorage not available"); }
+
+        function saveErrors() {
+            try { localStorage.setItem('speakup_vocab_errors', JSON.stringify(errorWords)); } 
+            catch(e) {}
+        }
+
+        function shuffleArray(array) { return array.sort(() => Math.random() - 0.5); }
+
+        function renderVocabReview() {
+            const container = document.getElementById('vocab-review-container');
+            container.innerHTML = '';
+            
+            const grouped = {};
+            advancedVocabBank.forEach(item => {
+                const pos = item.pos.split(' / ')[0]; // Group by primary pos
+                if(!grouped[pos]) grouped[pos] = [];
+                grouped[pos].push(item);
+            });
+
+            for (const pos in grouped) {
+                let itemsHtml = grouped[pos].map(item => `
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-white rounded-lg border border-gray-100 shadow-sm gap-2">
+                        <div>
+                            <div class="font-bold text-gray-800 text-base flex items-center gap-2">
+                                ${item.word} 
+                                ${errorWords.includes(item.word) ? '<span class="bg-rose-100 text-rose-600 text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider">Needs Practice</span>' : ''}
+                            </div>
+                            <div class="text-xs text-gray-500">${item.meaning}</div>
+                        </div>
+                        <button onclick="speakWord('${item.word}')" class="text-purple-500 hover:bg-purple-50 w-8 h-8 rounded-full flex items-center justify-center transition-colors shrink-0 self-end sm:self-auto"><i class="fa-solid fa-volume-high"></i></button>
+                    </div>
+                `).join('');
+
+                container.innerHTML += `
+                    <details class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group">
+                        <summary class="font-bold text-sm md:text-base p-4 cursor-pointer bg-gray-50 group-open:bg-purple-50 group-open:text-purple-700 transition-colors flex justify-between items-center select-none capitalize">
+                            ${pos}s (${grouped[pos].length}) <i class="fa-solid fa-chevron-down group-open:rotate-180 transition-transform"></i>
+                        </summary>
+                        <div class="p-3 md:p-4 border-t border-gray-100 space-y-2 bg-gray-50/50">
+                            ${itemsHtml}
+                        </div>
+                    </details>
+                `;
+            }
+        }
+
+        function generateVocabQuestions() {
+            let pool = [...advancedVocabBank];
+            let selected = [];
+            
+            // Prioritise error words (up to 5)
+            let errorPool = pool.filter(w => errorWords.includes(w.word));
+            errorPool = shuffleArray(errorPool);
+            
+            let numErrorsToTake = Math.min(5, errorPool.length);
+            for(let i=0; i<numErrorsToTake; i++) {
+                selected.push(errorPool[i]);
+                pool = pool.filter(w => w.word !== errorPool[i].word); 
+            }
+            
+            // Fill rest with random words
+            pool = shuffleArray(pool);
+            let remainingNeeded = 10 - selected.length;
+            for(let i=0; i<remainingNeeded && i<pool.length; i++) {
+                selected.push(pool[i]);
+            }
+            
+            return shuffleArray(selected); // Reshuffle the final 10 questions
+        }
+
+        function renderTargetWords() {
+            const container = document.getElementById('vocab-target-container');
+            container.innerHTML = vocabQuestions.map(item => `
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-gradient-to-r from-purple-50 to-white rounded-lg border border-purple-100 shadow-sm gap-2">
+                    <div>
+                        <div class="font-bold text-purple-900 text-base flex items-center gap-2">
+                            ${item.word} 
+                            ${errorWords.includes(item.word) ? '<span class="bg-rose-100 text-rose-600 text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider">Needs Practice</span>' : ''}
+                        </div>
+                        <div class="text-[10px] text-purple-600/80 font-bold uppercase tracking-wider mb-0.5">${item.pos}</div>
+                        <div class="text-sm text-gray-700 font-medium">${item.meaning}</div>
+                    </div>
+                    <button onclick="speakWord('${item.word}')" class="text-purple-500 hover:bg-purple-100 hover:text-purple-700 w-10 h-10 rounded-full flex items-center justify-center transition-colors shrink-0 self-end sm:self-auto shadow-sm bg-white border border-purple-100"><i class="fa-solid fa-volume-high"></i></button>
+                </div>
+            `).join('');
+        }
+
+        function initVocabReview() {
+            vocabQuestions = generateVocabQuestions(); // Pre-draw 10 words for the upcoming game
+            renderTargetWords();
+            renderVocabReview(); // Render the full dictionary
+            transitionTo('page-vocab-review');
+        }
+
+        function startVocabGame() {
+            currentVocabIndex = 0;
+            vocabScore = 0;
+            
+            document.getElementById('vocab-score').innerText = vocabScore;
+            document.getElementById('vocab-end-screen').classList.add('hidden');
+            document.getElementById('vocab-next-btn').classList.add('hidden');
+            document.getElementById('vocab-game-feedback').innerText = "";
+            document.getElementById('vocab-q-num').parentElement.classList.remove('hidden');
+            
+            nav('vocab-game');
+            loadVocabQuestion();
+        }
+
+        function loadVocabQuestion() {
+            document.getElementById('vocab-next-btn').classList.add('hidden');
+            document.getElementById('vocab-game-feedback').innerText = "";
+            
+            const q = vocabQuestions[currentVocabIndex];
+            
+            document.getElementById('vocab-q-num').innerText = currentVocabIndex + 1;
+            document.getElementById('vocab-progress').style.width = `${((currentVocabIndex) / vocabQuestions.length) * 100}%`;
+            
+            document.getElementById('vocab-hint').innerText = `${q.meaning} (${q.hint})`;
+            
+            // Replace the target word in the example with a blank
+            const regex = new RegExp(`\\b${q.word}\\b`, 'gi');
+            let blankedExample = q.example.replace(regex, '<span class="inline-block w-20 md:w-24 border-b-2 border-purple-400 mx-1"></span>');
+            
+            // Fallback if the word has suffixes in the example (e.g. "adopts" instead of "adopt")
+            if (blankedExample === q.example) {
+                blankedExample = q.example.replace(new RegExp(q.word, 'i'), '<span class="inline-block w-20 md:w-24 border-b-2 border-purple-400 mx-1"></span>');
+            }
+            document.getElementById('vocab-sentence').innerHTML = blankedExample;
+
+            let options = [q.word];
+            let pool = advancedVocabBank.filter(w => w.word !== q.word);
+            pool = shuffleArray(pool);
+            for(let i=0; i<3; i++) { options.push(pool[i].word); }
+            options = shuffleArray(options);
+
+            const optionsContainer = document.getElementById('vocab-options');
+            optionsContainer.innerHTML = "";
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "w-full py-3 px-4 md:py-4 md:px-6 bg-gray-50 border-2 border-gray-200 rounded-xl text-left font-bold text-gray-700 hover:border-purple-400 hover:bg-purple-50 transition-all active:scale-95 text-sm md:text-base";
+                btn.innerText = opt;
+                btn.onclick = () => checkVocabAnswer(opt, q.word, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkVocabAnswer(selected, correct, btnElement) {
+            const buttons = document.getElementById('vocab-options').getElementsByTagName('button');
+            for(let btn of buttons) { btn.disabled = true; btn.classList.add('opacity-70'); }
+            btnElement.classList.remove('opacity-70');
+
+            const feedback = document.getElementById('vocab-game-feedback');
+            const sentence = document.getElementById('vocab-sentence');
+
+            if (selected === correct) {
+                btnElement.classList.replace('bg-gray-50', 'bg-emerald-100');
+                btnElement.classList.replace('border-gray-200', 'border-emerald-500');
+                btnElement.classList.add('text-emerald-800');
+                feedback.innerHTML = "<span class='text-emerald-500'><i class='fa-solid fa-star'></i> Brilliant!</span>";
+                vocabScore++;
+                document.getElementById('vocab-score').innerText = vocabScore;
+                sentence.innerHTML = sentence.innerHTML.replace('<span class="inline-block w-20 md:w-24 border-b-2 border-purple-400 mx-1"></span>', `<span class="text-emerald-600 font-bold underline decoration-emerald-400">${correct}</span>`);
+                
+                // Remove from errors if exists
+                errorWords = errorWords.filter(w => w !== correct);
+                saveErrors();
+                speakWord(correct); 
+            } else {
+                btnElement.classList.replace('bg-gray-50', 'bg-rose-100');
+                btnElement.classList.replace('border-gray-200', 'border-rose-500');
+                btnElement.classList.add('text-rose-800');
+                feedback.innerHTML = `<span class='text-rose-500 text-sm md:text-base'><i class='fa-solid fa-circle-xmark'></i> The correct answer is <b>${correct}</b></span>`;
+                sentence.innerHTML = sentence.innerHTML.replace('<span class="inline-block w-20 md:w-24 border-b-2 border-purple-400 mx-1"></span>', `<span class="text-rose-600 font-bold underline decoration-rose-400">${correct}</span>`);
+                
+                // Add to errors
+                if(!errorWords.includes(correct)) {
+                    errorWords.push(correct);
+                    saveErrors();
+                }
+            }
+            
+            document.getElementById('vocab-progress').style.width = `${((currentVocabIndex + 1) / vocabQuestions.length) * 100}%`;
+            document.getElementById('vocab-next-btn').classList.remove('hidden');
+        }
+
+        function nextVocabQuestion() {
+            currentVocabIndex++;
+            if (currentVocabIndex < vocabQuestions.length) {
+                loadVocabQuestion();
+            } else {
+                document.getElementById('vocab-q-num').parentElement.classList.add('hidden');
+                document.getElementById('vocab-next-btn').classList.add('hidden');
+                document.getElementById('vocab-game-feedback').innerText = "";
+                
+                document.getElementById('vocab-end-screen').classList.remove('hidden');
+                document.getElementById('vocab-final-score').innerText = vocabScore;
+                document.getElementById('vocab-total-q').innerText = vocabQuestions.length;
+            }
+        }
+
+
+        // ================= Existing Data Structure & Logic =================
+        const db = {
+            practice: [
+                {
+                    title: "Practice Paper 1: Aviation Fair",
+                    topic: "Hong Kong Aviation Fair",
+                    bgProblem: "average seat occupancy rate: 72% <span class='pointer-events-none' aria-hidden='true'>/</span> month (<span class='pointer-events-none' aria-hidden='true'>↓</span> around 23% since last quarter)",
+                    bgObjective: "To join the Hong Kong Aviation Fair <span class='pointer-events-none' aria-hidden='true'>→</span> promote the upgraded service package and attract potential customers",
+                    proposal: ["Estimated cost: $20,000 (fair permit, booth installation, promotional materials)", "Period: 15 <span class='pointer-events-none' aria-hidden='true'>-</span> 17 Aug 20xx", "New airplane displays, pilot workshops, interactive games"],
+                    suggestion: "Contact Finance Department <span class='pointer-events-none' aria-hidden='true'>→</span> detailed budget plan",
+                    invitation: ["Fair briefing <span class='pointer-events-none' aria-hidden='true'>→</span> obtain event details", "Next Thurs, 2 p.m. – 3 p.m., Meeting Room B"],
+                    script: [
+                        "Good morning, everyone. Thank you for coming today. I'm Joe. In today's presentation, I'll talk about the proposal for joining the Hong Kong Aviation Fair.",
+                        "As you can see on the screen, this presentation will be divided into 4 parts: background, proposal details, benefits and concerns, and lastly, suggestion.",
+                        "Let's start with the background information. As you may know, the average seat occupancy rate is 72% per month. It has decreased by around 23% since last quarter. We are therefore proposing joining the Fair to promote our upgraded service package and attract potential customers.",
+                        "Moving on to our proposal details, the estimated cost is 20 thousand dollars, including fair permit, booth installation and promotional materials. The fair will be held from 15 to 17 August. There will be new airplane displays, pilot workshops and interactive games.",
+                        "You may ask: how would this proposal benefit our company? First, it gives direct exposure to aviation fans and potential customers. Second, it raises our brand awareness among other airlines.",
+                        "We understand you may have some concerns. One might ask: Will we get good return from this 20 thousand spending? To address this, we should do customer surveys after the fair.",
+                        "You may also wonder if our booth stands out from other airlines. For this, we can assure you that our special service demonstrations will attract more visitors.",
+                        "Based on what we have discussed, we suggest contacting the Finance Department to get a detailed budget plan. I would also like to invite you to our fair briefing. It will be held from 2 p.m. to 3 p.m. next Thursday at Meeting Room B.",
+                        "That's all for my presentation. Thank you for listening. Do you have any questions?"
+                    ]
+                },
+                {
+                    title: "Practice Paper 2: New Photocopiers",
+                    topic: "New Photocopiers",
+                    bgProblem: "average no. of copies made: 15,000 <span class='pointer-events-none' aria-hidden='true'>/</span> day (<span class='pointer-events-none' aria-hidden='true'>↑</span> about 33% since last quarter)",
+                    bgObjective: "To offer better photocopying services to students <span class='pointer-events-none' aria-hidden='true'>→</span> purchase 3 new photocopiers",
+                    proposal: ["Estimated cost: $85,000 (machines, maintenance plan)", "Placed in project room & self-study areas", "A3 & A4 sized, black & white copies only"],
+                    suggestion: "Contact Supplies Department <span class='pointer-events-none' aria-hidden='true'>→</span> suitable models",
+                    invitation: ["Product demonstration by Best Office Equipment", "15 Jan, 2 p.m. – 3 p.m., Room 1207"],
+                    script: [
+                        "Good morning, everyone. Thank you for being here today. I'm Carol Yuen. Today, I'd like to present our proposal for purchasing new photocopiers.",
+                        "This presentation covers 4 parts: background, proposal details, benefits and concerns, and lastly, suggestion.",
+                        "Before we dive in, let me explain the situation. Our college currently makes around 15,000 copies per day, which is about 33% more than last quarter. To better serve our students' needs, we are proposing purchasing 3 new photocopiers.",
+                        "Let's take a look at what we are proposing. The estimated cost is $85,000, which covers the machines and a maintenance plan. The photocopiers will be placed in the project room and self-study areas. They will support A3 and A4 sizes and provide black and white copies only.",
+                        "So, what do we stand to gain? First, students will enjoy faster and more reliable photocopying services on campus. Second, having machines in key study areas can save students time between classes.",
+                        "Of course, we are aware of some concerns. You might wonder: is $85,000 too costly for the college right now? In response to this, we should explore budget-friendly maintenance plans to keep long-term costs low.",
+                        "Another concern might be whether the machines will be overused quickly. Please rest assured that our chosen models are built for high-volume daily use.",
+                        "Taking everything into account, we recommend contacting the Supplies Department to look into suitable models. I would also like to invite you to a product demonstration by Best Office Equipment for more details. It will be held on 15 January, from 2 p.m. to 3 p.m., in Room 1207, Edward Building.",
+                        "This brings me to the end of my presentation. Thank you for your time. Are there any questions?"
+                    ]
+                },
+                {
+                    title: "Practice Paper 3: Chill-out Room",
+                    topic: "Chill-out Room",
+                    bgProblem: "average no. of colleagues on sick leave: 12 <span class='pointer-events-none' aria-hidden='true'>/</span> month (<span class='pointer-events-none' aria-hidden='true'>↑</span> about 25% since last year)",
+                    bgObjective: "To set up a chill-out room <span class='pointer-events-none' aria-hidden='true'>→</span> provide a space for relaxation from work and enhance overall well-being",
+                    proposal: ["Estimated cost: $50,000 (design, renovation, furniture)", "Set-up period: 21 <span class='pointer-events-none' aria-hidden='true'>-</span> 28 March 20xx", "Refreshments, massage chairs, yoga mats"],
+                    suggestion: "Source designer house <span class='pointer-events-none' aria-hidden='true'>→</span> interior design plan",
+                    invitation: ["Monthly Business Meeting <span class='pointer-events-none' aria-hidden='true'>→</span> discuss preference", "Next Tue, 10 a.m. - 11 a.m., Conference Room A"],
+                    script: [
+                        "Good morning, everyone. Thank you for joining us today. I'm Kate Fong, Executive Officer at IT Solutions. Today, I'd like to present our proposal for setting up a chill-out room.",
+                        "I have divided today's talk into 4 sections: background, proposal details, benefits and concerns, and finally, suggestion.",
+                        "To begin, here is some background information. On average, 12 colleagues go on sick leave every month, which is about 25% more than last year. To address this, we are proposing setting up a chill-out room to give staff a space to relax and improve their overall well-being.",
+                        "Now let me walk you through the details. the estimated cost is $50,000, covering design, renovation and furniture. The set-up period will run from 21 to 28 March. The room will be equipped with refreshments, massage chairs and yoga mats.",
+                        "So, how exactly does this help our company? One key benefit is that a relaxing space can help reduce stress, which means fewer sick days taken by staff. Another is that it can show that our management cares about employees, which can then boost our staff morale and loyalty.",
+                        "You might have a few doubts about this. Some of you may wonder: Is $50,000 a reasonable amount for this project? To handle this, we should get a few quotes from different designers to find the best value.",
+                        "Some of you could also be asking whether the room will be used enough to justify the cost. We can assure you that a short staff survey has already shown strong interest from most departments.",
+                        "In light of this, we suggest sourcing a designer house to develop a proper interior design plan. May I also invite you to our Monthly Business Meeting to discuss renovation preferences? It will be held next Tuesday, from 10 a.m. to 11 a.m., in Conference Room A.",
+                        "That's all for my presentation. Thank you for listening. Do you have any questions?"
+                    ]
+                },
+                {
+                    title: "Practice Paper 4: Dragon Boat Race",
+                    topic: "Hong Kong Dragon Boat Race",
+                    bgProblem: "average no. of members last year: 150 <span class='pointer-events-none' aria-hidden='true'>/</span> month (<span class='pointer-events-none' aria-hidden='true'>↓</span> about 42%)",
+                    bgObjective: "To join the Hong Kong Dragon Boat Race <span class='pointer-events-none' aria-hidden='true'>→</span> enhance the visibility of our fitness centre to the public",
+                    proposal: ["Expected cost: $30,000 (team gear, training fees, insurance)", "Training and Racing Period: 1 Apr <span class='pointer-events-none' aria-hidden='true'>-</span> 10 Jun 2025", "Rowing practice, fitness training"],
+                    suggestion: "Contact race organiser <span class='pointer-events-none' aria-hidden='true'>→</span> event details",
+                    invitation: ["General Staff Meeting <span class='pointer-events-none' aria-hidden='true'>→</span> discuss the logistics", "Next Thu, 10:30 a.m. - 11:30 a.m., Meeting Room B"],
+                    script: [
+                        "Good morning, everyone. Thank you for being here today. I'm Sofia Kong, Marketing Officer at Wellness Fitness. Today, I'd like to present our proposal for joining the Hong Kong Dragon Boat Race.",
+                        "This presentation consists of 4 parts: background, proposal details, benefits and concerns, and lastly, suggestion.",
+                        "First, let me give you some background info. Our average number of new members has dropped to 150 per month, which is about 42% less than last year. To turn this around, we are proposing joining the Hong Kong Dragon Boat Race to raise our fitness centre's visibility to the public.",
+                        "Moving on to the proposal details, the expected cost is $30,000, which covers team gear, training fees and insurance. The training and racing period will run from 1 April to 10 June 2025. Activities will include rowing practice and fitness training sessions.",
+                        "This leads us to the benefits. First, taking part in a well-known public event will put our brand in front of a large audience. Second, it can build team spirit among our staff, which can then create a more positive and energetic workplace.",
+                        "We understand you may have some concerns. One might ask: Is our current staff physically ready for this kind of competition? To handle this, we should arrange a fitness assessment for all interested team members beforehand.",
+                        "You may also wonder if $30,000 is too high given our current drop in membership. For this, we can assure you that the media coverage from the race will likely bring in far more new members than the cost.",
+                        "To make this proposal happen, we suggest contacting the race organiser to get full event details and registration information. You are also welcome to join our General Staff Meeting to discuss the logistics. It will be held next Thursday, from 10:30 a.m. to 11:30 a.m., in Meeting Room B.",
+                        "That's all for my presentation. Thank you for your time. Does anyone have any questions?"
+                    ]
+                }
+            ],
+            mock: {
+                title: "Mock Exam: Business Seminar in New York",
+                topic: "Business Seminar in New York",
+                bgProblem: "average no. of US suppliers : 184 <span class='pointer-events-none' aria-hidden='true'>/</span> month (<span class='pointer-events-none' aria-hidden='true'>↓</span> around 15% since last month)",
+                bgObjective: "To join the Business Seminar in New York <span class='pointer-events-none' aria-hidden='true'>→</span> attract more US suppliers to use our online trading platform",
+                proposal: ["Estimated budget: $47,000 (transport & accommodation)", "Period: 13 <span class='pointer-events-none' aria-hidden='true'>-</span> 15 Aug 20xx", "Talks, lunch conference, meetings with business owners"],
+                suggestion: "Email seminar organiser <span class='pointer-events-none' aria-hidden='true'>→</span> event details",
+                invitation: ["Business development meeting <span class='pointer-events-none' aria-hidden='true'>→</span> understand work plans", "Next Thu, 10:30 a.m. - 12:30 p.m., Project Room B"],
+                script: [] 
+            }
+        };
+
+        let currentMode = '';
+        let currentData = null;
+        let currentSlide = 0;
+
+        function generateSlidesHTML(data) {
+            return [
+                {
+                    html: `
+                        <div class="flex-1 h-fit min-h-full w-full flex flex-col items-center justify-center gap-2 sm:gap-4 text-center bg-gradient-to-br from-blue-50/50 to-indigo-50/50 p-2 sm:p-4 md:p-8 border-4 border-blue-100 box-border rounded-lg">
+                            <div class="w-full text-left"><div class="bg-gradient-to-r from-blue-200 to-indigo-200 text-blue-800 px-2 py-0.5 md:px-3 md:py-1 font-bold tracking-widest uppercase text-[8px] md:text-xs mb-1 inline-block rounded shadow-sm">Presentation Topic</div></div>
+                            <h1 class="text-lg sm:text-2xl md:text-5xl font-extrabold text-gray-800 leading-tight my-1 md:my-2 drop-shadow-sm">${data.topic}</h1>
+                            <div class="w-full text-left mt-1 md:mt-2"><div class="bg-gradient-to-r from-blue-200 to-indigo-200 text-blue-800 px-2 py-0.5 md:px-3 md:py-1 font-bold tracking-widest uppercase text-[8px] md:text-xs mb-1 md:mb-2 inline-block rounded shadow-sm">Presentation Outline</div></div>
+                            <div class="flex justify-between gap-1 md:gap-6 w-full px-1 md:px-2">
+                                <div class="flex flex-col items-center w-1/4"><div class="w-6 h-6 sm:w-10 sm:h-10 md:w-14 md:h-14 bg-gradient-to-br from-teal-500 to-teal-600 rounded-full flex items-center justify-center text-white text-[10px] md:text-2xl mb-1 md:mb-2 shadow-md"><i class="fa-solid fa-info"></i></div><span class="font-bold text-[8px] sm:text-[10px] md:text-sm leading-tight text-gray-700">1. Background</span></div>
+                                <div class="flex flex-col items-center w-1/4"><div class="w-6 h-6 sm:w-10 sm:h-10 md:w-14 md:h-14 bg-gradient-to-br from-teal-500 to-teal-600 rounded-full flex items-center justify-center text-white text-[10px] md:text-2xl mb-1 md:mb-2 shadow-md"><i class="fa-solid fa-file-signature"></i></div><span class="font-bold text-[8px] sm:text-[10px] md:text-sm leading-tight text-gray-700">2. Proposal<br>Details</span></div>
+                                <div class="flex flex-col items-center w-1/4"><div class="w-6 h-6 sm:w-10 sm:h-10 md:w-14 md:h-14 bg-gradient-to-br from-teal-500 to-teal-600 rounded-full flex items-center justify-center text-white text-[10px] md:text-2xl mb-1 md:mb-2 shadow-md"><i class="fa-solid fa-scale-balanced"></i></div><span class="font-bold text-[8px] sm:text-[10px] md:text-sm leading-tight text-gray-700">3. Benefit(s) &<br>Concern(s)</span></div>
+                                <div class="flex flex-col items-center w-1/4"><div class="w-6 h-6 sm:w-10 sm:h-10 md:w-14 md:h-14 bg-gradient-to-br from-teal-500 to-teal-600 rounded-full flex items-center justify-center text-white text-[10px] md:text-2xl mb-1 md:mb-2 shadow-md"><i class="fa-solid fa-lightbulb"></i></div><span class="font-bold text-[8px] sm:text-[10px] md:text-sm leading-tight text-gray-700">4. Suggestion</span></div>
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    html: `
+                        <div class="flex-1 h-fit min-h-full w-full flex flex-col justify-center gap-1.5 sm:gap-4 bg-white p-2 sm:p-3 md:p-8 border-4 border-blue-50 text-left box-border rounded-lg">
+                            <div>
+                                <div class="bg-gradient-to-r from-blue-200 to-indigo-200 text-blue-800 px-2 py-0.5 md:px-3 md:py-1 font-bold tracking-widest uppercase text-[8px] md:text-xs mb-1 md:mb-2 inline-block rounded shadow-sm">Background</div>
+                                <div class="pl-2 md:pl-4 text-[10px] sm:text-xs md:text-base">
+                                    <p class="font-bold mb-0.5 md:mb-1 text-gray-800">Problem:</p>
+                                    <ul class="list-disc pl-3 md:pl-5 mb-1.5 md:mb-3 text-gray-700 leading-snug md:leading-relaxed"><li>${data.bgProblem}</li></ul>
+                                    <p class="font-bold mb-0.5 md:mb-1 text-gray-800">Objective:</p>
+                                    <ul class="list-disc pl-3 md:pl-5 text-gray-700 leading-snug md:leading-relaxed"><li>${data.bgObjective}</li></ul>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="bg-gradient-to-r from-blue-200 to-indigo-200 text-blue-800 px-2 py-0.5 md:px-3 md:py-1 font-bold tracking-widest uppercase text-[8px] md:text-xs mb-1 md:mb-2 inline-block rounded shadow-sm">Proposal</div>
+                                <div class="pl-2 md:pl-4 text-gray-700 text-[10px] sm:text-xs md:text-base">
+                                    <ol class="list-decimal pl-3 md:pl-5 space-y-0.5 md:space-y-2 leading-snug md:leading-relaxed">
+                                        ${data.proposal.map(p => `<li>${p}</li>`).join('')}
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    html: `
+                        <div class="flex-1 h-fit min-h-full w-full flex flex-col justify-center gap-1 sm:gap-4 bg-white p-2 sm:p-4 md:p-6 border-4 border-blue-50 text-left box-border rounded-lg">
+                            <div class="w-full">
+                                <div class="bg-gradient-to-r from-blue-200 to-indigo-200 text-blue-800 px-2 py-0.5 md:px-3 md:py-1 font-bold tracking-widest uppercase text-[8px] md:text-xs mb-0.5 md:mb-1 inline-block rounded shadow-sm">Benefit(s)</div>
+                                <div class="bg-gray-100 h-2 sm:h-6 md:h-8 w-full rounded shadow-inner border border-gray-200/50"></div>
+                            </div>
+                            <div class="w-full">
+                                <div class="bg-gradient-to-r from-blue-200 to-indigo-200 text-blue-800 px-2 py-0.5 md:px-3 md:py-1 font-bold tracking-widest uppercase text-[8px] md:text-xs mb-0.5 md:mb-1 inline-block rounded shadow-sm">Concern(s)</div>
+                                <div class="flex items-stretch w-full min-h-[2rem] sm:min-h-[3rem]">
+                                    <div class="bg-gray-100 flex-grow rounded-l shadow-inner border border-gray-200/50 border-r-0"></div>
+                                    <div class="bg-white border-2 border-gray-800 rounded-r px-1 md:px-1.5 py-0.5 md:py-1 text-[8px] sm:text-xs md:text-sm font-bold shrink-0 flex items-center justify-center text-center shadow-sm leading-tight text-gray-800">
+                                        Possible<br>Solution(s)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w-full">
+                                <div class="bg-gradient-to-r from-blue-200 to-indigo-200 text-blue-800 px-2 py-0.5 md:px-3 md:py-1 font-bold tracking-widest uppercase text-[8px] md:text-xs mb-0.5 md:mb-1 inline-block rounded shadow-sm">Suggestion</div>
+                                <div class="bg-gray-50 p-1 md:p-2 rounded text-[9px] sm:text-[11px] md:text-sm text-gray-700 border border-gray-200 shadow-sm">
+                                    <ul class="list-disc pl-3 md:pl-5"><li>${data.suggestion}</li></ul>
+                                </div>
+                            </div>
+                            <div class="w-full">
+                                <div class="bg-gradient-to-r from-blue-200 to-indigo-200 text-blue-800 px-2 py-0.5 md:px-3 md:py-1 font-bold tracking-widest uppercase text-[8px] md:text-xs mb-0.5 md:mb-1 inline-block rounded shadow-sm">Invitation</div>
+                                <div class="bg-gray-50 p-1 md:p-2 rounded text-[9px] sm:text-[11px] md:text-sm text-gray-700 border border-gray-200 shadow-sm">
+                                    <ul class="list-disc pl-3 md:pl-5 space-y-0.5 md:space-y-1">
+                                        ${data.invitation.map(i => `<li>${i}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                }
+            ];
+        }
+
+        function loadPaper(mode, index) {
+            currentMode = mode;
+            currentData = mode === 'practice' ? db.practice[index] : db.mock;
+            
+            document.getElementById('practice-title').innerText = currentData.title;
+            
+            const scriptContainer = document.getElementById('script-content');
+            scriptContainer.innerHTML = '';
+            if (mode === 'practice') {
+                currentData.script.forEach((para, i) => {
+                    scriptContainer.innerHTML += `
+                        <div class="flex gap-3 md:gap-4 p-3 md:p-4 hover:bg-indigo-50/50 rounded-xl transition-colors border border-transparent hover:border-indigo-100 group">
+                            <button onclick="speakSegment('seg${i}')" class="text-indigo-300 hover:text-indigo-600 group-hover:text-indigo-500 text-xl md:text-2xl mt-0.5 shrink-0 transition-transform active:scale-90"><i class="fa-solid fa-circle-play"></i></button>
+                            <div id="seg${i}" class="text-gray-700">${para}</div>
+                        </div>
+                    `;
+                });
+                
+                makeTextClickable(scriptContainer);
+
+                document.getElementById('btn-to-step2').innerHTML = `Next: Study Script <i class="fa-solid fa-arrow-right"></i>`;
+                document.getElementById('btn-to-step2').setAttribute('onclick', 'switchStep(2)');
+                document.getElementById('btn-back-from-3').innerHTML = `<i class="fa-solid fa-arrow-left mr-2"></i> Back`;
+                document.getElementById('btn-back-from-3').setAttribute('onclick', 'switchStep(2)');
+                document.getElementById('script-reader-container').classList.remove('hidden');
+                document.getElementById('step1-badge').innerText = "1 of 3";
+                document.getElementById('step3-badge').innerText = "3 of 3";
+            } else {
+                document.getElementById('btn-to-step2').innerHTML = `<span class="relative z-10 flex items-center justify-center gap-2">Next: Record <i class="fa-solid fa-video"></i></span>`;
+                document.getElementById('btn-to-step2').setAttribute('onclick', 'switchStep(3)');
+                document.getElementById('btn-to-step2').className = "btn-shine w-full sm:w-auto bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 py-3 md:px-10 md:py-4 rounded-full font-black text-base md:text-lg hover:shadow-[0_10px_20px_-10px_rgba(16,185,129,0.8)] transition-all active:scale-95 flex items-center justify-center gap-3 border border-emerald-400/30 ml-auto";
+                
+                document.getElementById('btn-back-from-3').innerHTML = `<i class="fa-solid fa-arrow-left mr-2"></i> Back`;
+                document.getElementById('btn-back-from-3').setAttribute('onclick', 'switchStep(1)');
+                document.getElementById('script-reader-container').classList.add('hidden');
+                document.getElementById('step1-badge').innerText = "1 of 2";
+                document.getElementById('step3-badge').innerText = "2 of 2";
+            }
+
+            transitionTo('page-practice');
+            switchStep(1, true);
+        }
+
+        // --- Safe TTS Engine Initialization ---
+        let synth = null;
+        let voices = [];
+        
+        try {
+            if ('speechSynthesis' in window) {
+                synth = window.speechSynthesis;
+                function initVoices() {
+                    if(synth) voices = synth.getVoices();
+                }
+                synth.onvoiceschanged = initVoices;
+                setTimeout(initVoices, 1000);
+            }
+        } catch(e) { console.warn("TTS Init Error:", e); }
+
+        function speakText(text, accentId, speedId) {
+            if (!synth) return;
+            try {
+                if (synth.speaking) synth.cancel();
+                if (!text || text.trim() === '') return;
+                
+                let processedText = text
+                    .replace(/(\d{1,2}):00/g, "$1 o'clock")
+                    .replace(/(\d{1,2}):0(\d)/g, "$1 oh $2")
+                    .replace(/(\d{1,2}):([1-5]\d)/g, "$1 $2")
+                    .replace(/(\d)\s*(am|pm|a\.m\.|p\.m\.)/gi, '$1 $2')
+                    .replace(/\b(pm|p\.m\.)\b/gi, 'P M')
+                    .replace(/\b(am|a\.m\.)\b/gi, 'A M')
+                    .replace(/20K/gi, '20 thousand')
+                    .replace(/&/g, ' and ');
+                                        
+                const utterThis = new SpeechSynthesisUtterance(processedText);
+                
+                let langCode = 'en-GB';
+                let speed = 1.0;
+                
+                if(document.getElementById(accentId)) {
+                    langCode = document.getElementById(accentId).value === 'UK' ? 'en-GB' : 'en-US';
+                }
+                if(document.getElementById(speedId)) {
+                    speed = parseFloat(document.getElementById(speedId).value);
+                }
+                
+                utterThis.lang = langCode; 
+                
+                let voice = voices.find(v => v.lang.includes(langCode) && (v.name.includes('Female') || v.name.includes('Google') || v.name.includes('Natural')));
+                if(!voice) voice = voices.find(v => v.lang.includes(langCode));
+                if(voice) utterThis.voice = voice;
+                utterThis.rate = speed; 
+                
+                synth.speak(utterThis);
+            } catch(e) { console.warn("Speak error:", e); }
+        }
+
+        function stopTTS() { if (synth && synth.speaking) synth.cancel(); }
+
+        // --- Assessment Prep Logic ---
+        function playAssessmentTTS() {
+            const text = document.getElementById('assessment-script').value;
+            if (text.trim() === '') { alert("Please paste or type a script first!"); return; }
+            speakText(text, 'assess-voice', 'assess-speed');
+        }
+
+        let assessAudioRecorder;
+        let assessAudioChunks = [];
+        let isAssessRecording = false;
+        let globalAssessAudioBlob = null; 
+
+        async function toggleAssessRecording() {
+            const btn = document.getElementById('btn-assess-record');
+            
+            if (!isAssessRecording) {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    const audioTypes = ['audio/mp4', 'audio/webm'];
+                    let mimeType = '';
+                    for (let t of audioTypes) {
+                        if (MediaRecorder.isTypeSupported(t)) { mimeType = t; break; }
+                    }
+                    
+                    assessAudioRecorder = new MediaRecorder(stream, { mimeType: mimeType });
+                    assessAudioChunks = [];
+
+                    assessAudioRecorder.ondataavailable = e => { if (e.data.size > 0) assessAudioChunks.push(e.data); };
+                    assessAudioRecorder.onstop = () => {
+                        globalAssessAudioBlob = new Blob(assessAudioChunks, { type: mimeType || 'audio/webm' });
+                        const audioUrl = URL.createObjectURL(globalAssessAudioBlob);
+                        
+                        document.getElementById('assess-audio-player').src = audioUrl;
+                        
+                        let extAudio = mimeType.includes('mp4') ? 'm4a' : 'mp3';
+                        const downloadLink = document.getElementById('assess-download-link');
+                        downloadLink.href = audioUrl;
+                        downloadLink.download = `SpeakUp_Audio_Practice.${extAudio}`;
+                        
+                        document.getElementById('assess-audio-result').classList.remove('hidden');
+                        stream.getTracks().forEach(track => track.stop());
+                    };
+
+                    assessAudioRecorder.start();
+                    isAssessRecording = true;
+                    btn.innerHTML = '<span class="relative z-10 flex items-center gap-2"><i class="fa-solid fa-stop"></i> Stop Recording</span>';
+                    btn.className = "btn-shine bg-gradient-to-r from-gray-700 to-gray-800 text-white px-6 py-3.5 md:px-10 md:py-4 rounded-full font-bold transition-all active:scale-95 flex items-center justify-center gap-3 shadow-lg text-base md:text-lg w-full max-w-sm border border-gray-600 animate-pulse";
+                    document.getElementById('assess-audio-result').classList.add('hidden');
+                } catch (err) {
+                    alert("Error accessing microphone. Please ensure you have granted microphone permissions.");
+                }
+            } else {
+                assessAudioRecorder.stop();
+                isAssessRecording = false;
+                btn.innerHTML = '<span class="relative z-10 flex items-center gap-2"><i class="fa-solid fa-microphone"></i> Start Recording</span>';
+                btn.className = "btn-shine bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white px-6 py-3.5 md:px-10 md:py-4 rounded-full font-bold transition-all active:scale-95 flex items-center justify-center gap-3 shadow-[0_10px_20px_-10px_rgba(244,63,94,0.6)] text-base md:text-lg w-full max-w-sm border border-rose-400/30";
+            }
+        }
+
+        async function shareAudio() {
+            if (!globalAssessAudioBlob) return;
+            const extAudio = globalAssessAudioBlob.type.includes('mp4') ? 'm4a' : 'mp3';
+            const file = new File([globalAssessAudioBlob], `SpeakUp_Audio_Practice.${extAudio}`, { type: globalAssessAudioBlob.type });
+            
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                try {
+                    await navigator.share({ title: 'My SpeakUp Audio Practice', text: 'Here is my audio recording!', files: [file] });
+                } catch (err) { console.log("Share cancelled"); }
+            } else {
+                alert("Direct WhatsApp sharing is not supported on this browser. Please use the 'Save MP3' button below, then share manually.");
+            }
+        }
+
+        // --- Practice Module Logic ---
+        function switchStep(stepNum, instant = false) {
+            const steps = [1, 2, 3];
+            steps.forEach(s => {
+                const el = document.getElementById('step-' + s);
+                if(s === stepNum) {
+                    el.classList.remove('hidden');
+                    void el.offsetWidth;
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                } else {
+                    el.style.opacity = '0';
+                    el.style.transform = 'translateY(15px)';
+                    setTimeout(() => el.classList.add('hidden'), 300);
+                }
+            });
+            
+            if(stepNum === 3) {
+                document.getElementById('tts-controls').classList.add('hidden');
+                if(currentMode !== 'mock') copyScriptToReader();
+            } else {
+                document.getElementById('tts-controls').classList.remove('hidden');
+            }
+
+            if(stepNum === 1 || stepNum === 3) {
+                currentSlide = 0;
+                updateSlideView();
+            }
+            if(stepNum !== 3 && isRecording) toggleRecording();
+            window.scrollTo(0,0);
+        }
+
+        function copyScriptToReader() {
+            const scriptDivs = document.querySelectorAll('#script-content > div > div');
+            let combinedHTML = '';
+            scriptDivs.forEach(div => { combinedHTML += `<p class="mb-3 md:mb-4 pb-3 md:pb-4 border-b border-gray-100 last:border-0">${div.innerText}</p>`; });
+            document.getElementById('script-reader').innerHTML = combinedHTML;
+        }
+
+        function speakSegment(id) { speakText(document.getElementById(id).innerText, 'accent-select', 'speed-select'); }
+        function speakWord(word) { speakText(word, 'accent-select', 'speed-select'); }
+
+        let syllableTimeout;
+        function estimateSyllables(word) {
+            const cleanWord = word.replace(/[^a-zA-Z]/g, '');
+            if (cleanWord.length <= 3) return cleanWord;
+            const regex = /[^aeiouy]*[aeiouy]+(?:[^aeiouy]*$|[^aeiouy](?=[^aeiouy]))?/gi;
+            const chunks = cleanWord.match(regex);
+            if (!chunks) return cleanWord;
+            if (chunks.length > 1 && chunks[chunks.length - 1].toLowerCase() === 'e') {
+                const last = chunks.pop();
+                chunks[chunks.length - 1] += last;
+            }
+            return chunks.join('-');
+        }
+
+        const specialPronunciations = {
+            'aug': 'August', 'jan': 'January', 'apr': 'April', 'jun': 'June',
+            'thurs': 'Thursday', 'thu': 'Thursday', 'tue': 'Tuesday',
+            '20': 'twenty', '15': 'fifteen', '17': 'seventeen',
+            '72%': 'seventy two percent', '23%': 'twenty three percent',
+            '33%': 'thirty three percent', '25%': 'twenty five percent',
+            '42%': 'forty two percent', '150': 'one hundred and fifty',
+            '$85000': 'eighty five thousand dollars', '$50000': 'fifty thousand dollars',
+            '$47000': 'forty seven thousand dollars', '$30000': 'thirty thousand dollars',
+            '$20000': 'twenty thousand dollars',
+            '85000': 'eighty five thousand', '50000': 'fifty thousand',
+            '47000': 'forty seven thousand', '30000': 'thirty thousand', '20000': 'twenty thousand',
+            '2025': 'twenty twenty five', '2026': 'twenty twenty six', '20xx': 'twenty twenty',
+            '1207': 'twelve oh seven', 
+            'pm': 'P M', 'am': 'A M', 'p.m.': 'P M', 'a.m.': 'A M',
+            'no': 'number', '&': 'and'
+        };
+
+        const syllableDict = { 
+            'occupancy': 'oc-cu-pan-cy', 'promotional': 'pro-mo-tion-al', 'interactive': 'in-ter-ac-tive', 
+            'demonstrations': 'de-mon-stra-tions', 'presentation': 'pre-sen-ta-tion', 'aviation': 'a-vi-a-tion', 
+            'proposal': 'pro-po-sal', 'photocopiers': 'pho-to-cop-i-ers', 'maintenance': 'main-te-nance',
+            'renovation': 'ren-o-va-tion', 'refreshments': 're-fresh-ments', 'visibility': 'vis-i-bil-i-ty',
+            'insurance': 'in-sur-ance', 'logistics': 'lo-gis-tics', 'budget': 'bud-get',
+            'survey': 'sur-vey', 'surveys': 'sur-veys', 'colleagues': 'col-leagues', 'accommodation': 'ac-com-mo-da-tion',
+            'aug': 'Au-gust', 'jan': 'Jan-u-a-ry', 'apr': 'A-pril', 'jun': 'June',
+            'thurs': 'Thurs-day', 'thu': 'Thurs-day', 'tue': 'Tues-day',
+            '20': 'twen-ty', '15': 'fif-teen', '17': 'se-ven-teen',
+            '72%': 'se-ven-ty-two per-cent', '23%': 'twen-ty-three per-cent',
+            '33%': 'thir-ty-three per-cent', '25%': 'twen-ty-five per-cent',
+            '42%': 'for-ty-two per-cent', '150': 'one hun-dred and fif-ty',
+            '$85000': 'eigh-ty-five thou-sand dol-lars', '$50000': 'fif-ty thou-sand dol-lars',
+            '$47000': 'for-ty-se-ven thou-sand dol-lars', '$30000': 'thir-ty thou-sand dol-lars',
+            '$20000': 'twen-ty thou-sand dol-lars',
+            '85000': 'eigh-ty-five thou-sand', '50000': 'fif-ty thou-sand',
+            '47000': 'for-ty-se-ven thou-sand', '30000': 'thir-ty thou-sand', '20000': 'twen-ty thou-sand',
+            '2025': 'twen-ty twen-ty-five', '2026': 'twen-ty twen-ty-six', '20xx': 'twen-ty twen-ty',
+            '1207': 'twelve oh se-ven', 
+            'pm': 'p.m.', 'am': 'a.m.', 'p.m.': 'p.m.', 'a.m.': 'a.m.',
+            'no': 'num-ber', '&': 'and'
+        };
+
+        function showSyllable(word) {
+            let cleanWord = word.replace(/^[.,;:!?()\-]+|[.,;:!?()\-]+$/g, '').trim();
+            if (cleanWord === '') return;
+            
+            if (cleanWord.toLowerCase() === 'a.m' || cleanWord.toLowerCase() === 'am') cleanWord = 'a.m.';
+            if (cleanWord.toLowerCase() === 'p.m' || cleanWord.toLowerCase() === 'pm') cleanWord = 'p.m.';
+            
+            const lowerWord = cleanWord.toLowerCase();
+            const wordToSpeak = specialPronunciations[lowerWord] || cleanWord;
+            speakWord(wordToSpeak);
+
+            let syllableStr = syllableDict[lowerWord];
+            if (!syllableStr) {
+                if (/\d/.test(cleanWord)) {
+                    syllableStr = cleanWord.replace(/(\d)(am|a\.m\.?)$/i, '$1 a.m.').replace(/(\d)(pm|p\.m\.?)$/i, '$1 p.m.');
+                } else {
+                    syllableStr = estimateSyllables(cleanWord.replace(/[^a-zA-Z]/g, ''));
+                }
+            }
+            if (!syllableStr || syllableStr.trim() === '') syllableStr = cleanWord;
+
+            const toast = document.getElementById('syllable-toast');
+            document.getElementById('syllable-text').innerText = syllableStr;
+            clearTimeout(syllableTimeout);
+            toast.classList.remove('hidden');
+            void toast.offsetWidth;
+            toast.classList.remove('opacity-0');
+            toast.classList.add('opacity-100', 'translate-y-2');
+            syllableTimeout = setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-2');
+                toast.classList.add('opacity-0');
+                setTimeout(() => toast.classList.add('hidden'), 300);
+            }, 3000);
+        }
+
+        function makeTextClickable(node) {
+            if (node.nodeType === Node.TEXT_NODE && node.nodeValue.trim() !== '') {
+                const words = node.nodeValue.split(/(\s+)/);
+                const fragment = document.createDocumentFragment();
+                let hasWord = false;
+                words.forEach(word => {
+                    if (word.trim() !== '' && (/[a-zA-Z0-9]/.test(word) || word.includes('&'))) {
+                        const span = document.createElement('span');
+                        span.className = 'clickable-word';
+                        span.onclick = (e) => { e.stopPropagation(); showSyllable(word); };
+                        span.textContent = word;
+                        fragment.appendChild(span);
+                        hasWord = true;
+                    } else { fragment.appendChild(document.createTextNode(word)); }
+                });
+                if (hasWord) node.parentNode.replaceChild(fragment, node);
+            } else if (node.nodeType === Node.ELEMENT_NODE) {
+                if (node.nodeName !== 'SCRIPT' && node.nodeName !== 'STYLE' && node.nodeName !== 'BUTTON' && !node.classList.contains('fa-solid') && !node.classList.contains('pointer-events-none')) {
+                    Array.from(node.childNodes).forEach(makeTextClickable);
+                }
+            }
+        }
+
+        function drawSlideToCanvas(slideIndex) {
+            const canvas = document.getElementById('recording-canvas');
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, 1280, 720);
+            ctx.lineWidth = 10;
+            ctx.strokeStyle = '#eff6ff';
+            ctx.strokeRect(5, 5, 1270, 710);
+
+            function drawBadge(text, x, y) {
+                ctx.fillStyle = '#bfdbfe';
+                ctx.fillRect(x, y - 30, ctx.measureText(text).width + 40, 45);
+                ctx.fillStyle = '#1e40af';
+                ctx.font = 'bold 20px sans-serif';
+                ctx.textAlign = 'left';
+                ctx.fillText(text.toUpperCase(), x + 20, y);
+            }
+
+            function wrapText(context, text, x, y, maxWidth, lineHeight) {
+                let cleanText = text.replace(/<[^>]*>?/gm, '');
+                let words = cleanText.split(' ');
+                let line = '';
+                let currentY = y;
+                for(let n = 0; n < words.length; n++) {
+                    let testLine = line + words[n] + ' ';
+                    let metrics = context.measureText(testLine);
+                    let testWidth = metrics.width;
+                    if (testWidth > maxWidth && n > 0) {
+                        context.fillText(line, x, currentY);
+                        line = words[n] + ' ';
+                        currentY += lineHeight;
+                    } else { line = testLine; }
+                }
+                context.fillText(line, x, currentY);
+                return currentY + lineHeight;
+            }
+
+            ctx.fillStyle = '#1f2937';
+            
+            if (slideIndex === 0) {
+                drawBadge('Presentation Topic', 100, 150);
+                ctx.font = 'bold 60px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText(currentData.topic, 640, 350);
+                
+                ctx.textAlign = 'left';
+                drawBadge('Presentation Outline', 100, 500);
+                
+                ctx.font = 'bold 24px sans-serif';
+                ctx.fillStyle = '#0d9488';
+                ctx.textAlign = 'center';
+                ctx.fillText('1. Background', 160, 600);
+                ctx.fillText('2. Proposal Details', 480, 600);
+                ctx.fillText('3. Benefit(s) & Concern(s)', 800, 600);
+                ctx.fillText('4. Suggestion', 1120, 600);
+                
+            } else if (slideIndex === 1) {
+                drawBadge('Background', 80, 100);
+                ctx.font = 'bold 30px sans-serif';
+                ctx.fillStyle = '#1f2937';
+                ctx.textAlign = 'left';
+                ctx.fillText('Problem:', 120, 180);
+                ctx.font = '30px sans-serif';
+                wrapText(ctx, '• ' + currentData.bgProblem, 150, 230, 1000, 40);
+                
+                ctx.font = 'bold 30px sans-serif';
+                ctx.fillText('Objective:', 120, 310);
+                ctx.font = '30px sans-serif';
+                wrapText(ctx, '• ' + currentData.bgObjective, 150, 360, 1000, 40);
+                
+                drawBadge('Proposal', 80, 460);
+                ctx.font = '30px sans-serif';
+                let currentY = 530;
+                currentData.proposal.forEach((p, i) => {
+                    currentY = wrapText(ctx, (i+1) + '. ' + p, 120, currentY, 1000, 40);
+                });
+                
+            } else if (slideIndex === 2) {
+                drawBadge('Benefit(s)', 80, 100);
+                ctx.fillStyle = '#e5e7eb'; ctx.fillRect(80, 130, 1040, 40);
+                
+                drawBadge('Concern(s)', 80, 260);
+                ctx.fillStyle = '#e5e7eb'; ctx.fillRect(80, 290, 740, 60);
+                ctx.strokeStyle = '#000'; ctx.lineWidth = 3; ctx.strokeRect(820, 290, 300, 60);
+                ctx.fillStyle = '#000'; ctx.font = 'bold 24px sans-serif'; ctx.textAlign = 'center';
+                ctx.fillText('Possible Solution(s)', 970, 330);
+                
+                ctx.textAlign = 'left';
+                drawBadge('Suggestion', 80, 440);
+                ctx.fillStyle = '#f9fafb'; ctx.fillRect(80, 460, 1040, 60);
+                ctx.fillStyle = '#374151'; ctx.font = '26px sans-serif';
+                wrapText(ctx, '• ' + currentData.suggestion, 100, 500, 1000, 35);
+                
+                drawBadge('Invitation', 80, 580);
+                ctx.fillStyle = '#f9fafb'; ctx.fillRect(80, 600, 1040, 90);
+                ctx.fillStyle = '#374151';
+                let invY = 635;
+                currentData.invitation.forEach((inv, i) => {
+                    invY = wrapText(ctx, '• ' + inv, 100, invY, 1000, 35);
+                });
+            }
+        }
+
+        function updateSlideView() {
+            const htmlSlides = generateSlidesHTML(currentData);
+            const containerStudy = document.getElementById('slide-display-study');
+            const containerRecord = document.getElementById('slide-display-record');
+            
+            if(containerStudy) {
+                containerStudy.innerHTML = htmlSlides[currentSlide].html;
+                makeTextClickable(containerStudy);
+            }
+            if(containerRecord) {
+                containerRecord.innerHTML = htmlSlides[currentSlide].html;
+                makeTextClickable(containerRecord);
+            }
+            
+            document.getElementById('slide-counter-study').innerText = `Slide ${currentSlide + 1} / 3`;
+            document.getElementById('slide-counter-record').innerText = `Slide ${currentSlide + 1} / 3`;
+            
+            drawSlideToCanvas(currentSlide);
+        }
+
+        function changeSlide(dir) {
+            currentSlide += dir;
+            if (currentSlide < 0) currentSlide = 0;
+            if (currentSlide > 2) currentSlide = 2;
+            updateSlideView();
+        }
+
+        // --- Video Recording Logic ---
+        let mediaRecorder;
+        let recordedChunks = [];
+        let isRecording = false;
+        let timerInterval;
+        let isCanvasDrawing = false; 
+        let seconds = 0;
+        let audioStream;
+        let globalRecordedBlob = null;
+        let currentExt = 'mp4';
+        let globalCanvasStream = null; 
+        let wakeLock = null; // 【新增】Wake Lock API 防止螢幕關閉
+
+        // 【終極防休眠機制】使用 requestAnimationFrame 取代 setInterval
+        function canvasDrawLoop() {
+            if (!isCanvasDrawing) return;
+            
+            drawSlideToCanvas(currentSlide);
+            const canvas = document.getElementById('recording-canvas');
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            
+            // 【新增】畫一個接近透明嘅時間戳喺左上角，肉眼睇唔到，但像素數據每格都唔同！
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.01)';
+            ctx.font = '10px Arial';
+            ctx.textAlign = "left";
+            ctx.fillText(Date.now().toString(), 5, 15);
+
+            // 畫一粒閃爍嘅紅點，確保每一格畫面都有「實質變化」，逼 Safari 錄影
+            if (Math.floor(Date.now() / 500) % 2 === 0) {
+                ctx.fillStyle = 'red';
+                ctx.beginPath();
+                ctx.arc(1250, 30, 10, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // iOS Safari 終極絕招：強制要求 Video Track 抽取當前畫面
+            if (globalCanvasStream) {
+                const videoTracks = globalCanvasStream.getVideoTracks();
+                if (videoTracks.length > 0 && typeof videoTracks[0].requestFrame === 'function') {
+                    videoTracks[0].requestFrame();
+                }
+            }
+            
+            requestAnimationFrame(canvasDrawLoop);
+        }
+
+        async function toggleRecording() {
+            const btn = document.getElementById('btn-record');
+            const timerDisplay = document.getElementById('timer');
+            const container = document.getElementById('record-container');
+            const indicator = document.getElementById('recording-indicator');
+            
+            if (!isRecording) {
+                try {
+                    audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    const canvas = document.getElementById('recording-canvas');
+                    
+                    // 【新增】嘗試啟動 Wake Lock 防止手機休眠
+                    if ('wakeLock' in navigator) {
+                        try {
+                            wakeLock = await navigator.wakeLock.request('screen');
+                        } catch (err) {
+                            console.log('Wake Lock API not supported or denied.');
+                        }
+                    }
+
+                    // 錄影前強制畫一次，確保 Canvas 唔係空白
+                    drawSlideToCanvas(currentSlide);
+                    globalCanvasStream = canvas.captureStream(30); 
+                    
+                    const combinedStream = new MediaStream([
+                        ...globalCanvasStream.getVideoTracks(),
+                        ...audioStream.getAudioTracks()
+                    ]);
+                    
+                    const types = ['video/mp4', 'video/webm;codecs=h264,mp4a.40.2', 'video/webm;codecs=h264', 'video/webm'];
+                    let mimeType = '';
+                    for (let type of types) {
+                        if (MediaRecorder.isTypeSupported(type)) { mimeType = type; break; }
+                    }
+
+                    const options = mimeType ? { mimeType: mimeType } : {};
+                    try { mediaRecorder = new MediaRecorder(combinedStream, options); } 
+                    catch (e) { mediaRecorder = new MediaRecorder(combinedStream); }
+
+                    currentExt = (mimeType && mimeType.includes('mp4')) ? 'mp4' : 'webm';
+                    recordedChunks = [];
+
+                    mediaRecorder.ondataavailable = e => { if (e.data.size > 0) recordedChunks.push(e.data); };
+                    mediaRecorder.onstop = () => {
+                        globalRecordedBlob = new Blob(recordedChunks, { type: mimeType || 'video/mp4' });
+                        const url = URL.createObjectURL(globalRecordedBlob);
+                        
+                        document.getElementById('presentation-video-player').src = url;
+                        
+                        const downloadLink = document.getElementById('download-link');
+                        downloadLink.href = url;
+                        downloadLink.download = `SpeakUp_Presentation.${currentExt}`;
+                        
+                        document.getElementById('download-area').classList.remove('hidden');
+                        
+                        audioStream.getTracks().forEach(track => track.stop());
+                        if(globalCanvasStream) globalCanvasStream.getTracks().forEach(track => track.stop());
+                        
+                        // 【新增】釋放 Wake Lock
+                        if (wakeLock !== null) {
+                            wakeLock.release().then(() => { wakeLock = null; });
+                        }
+                    };
+
+                    mediaRecorder.start();
+                    isRecording = true;
+                    btn.innerHTML = '<span class="relative z-10 flex items-center gap-2"><i class="fa-solid fa-stop"></i> Stop Recording</span>';
+                    btn.className = "btn-shine bg-gradient-to-r from-gray-700 to-gray-800 text-white px-6 py-3.5 md:px-10 md:py-4 rounded-full font-black text-base md:text-xl transition-all active:scale-95 shadow-lg mb-2 w-full max-w-sm flex items-center justify-center gap-2 md:gap-3 z-10 border border-gray-600 animate-pulse";
+                    
+                    container.classList.add('border-rose-300', 'bg-rose-50/20');
+                    document.getElementById('download-area').classList.add('hidden');
+                    indicator.classList.remove('hidden');
+                    
+                    seconds = 0;
+                    timerDisplay.innerText = "00:00";
+                    timerDisplay.classList.add('text-rose-500', 'font-bold');
+                    
+                    timerInterval = setInterval(() => {
+                        seconds++;
+                        const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
+                        const secs = String(seconds % 60).padStart(2, '0');
+                        timerDisplay.innerText = `${mins}:${secs}`;
+                    }, 1000);
+
+                    // 啟動繪圖迴圈
+                    isCanvasDrawing = true;
+                    canvasDrawLoop();
+
+                } catch (err) {
+                    alert("Error accessing microphone. Please ensure you have granted microphone permissions in your settings.");
+                }
+            } else {
+                mediaRecorder.stop();
+                isRecording = false;
+                
+                clearInterval(timerInterval);
+                isCanvasDrawing = false; // 停止繪圖迴圈
+                globalCanvasStream = null; // 清除 Stream 參考
+                
+                btn.innerHTML = '<span class="relative z-10 flex items-center gap-2"><i class="fa-solid fa-video"></i> Start Recording</span>';
+                btn.className = "btn-shine bg-gradient-to-r from-rose-500 to-pink-600 text-white px-6 py-3.5 md:px-10 md:py-4 rounded-full font-black text-base md:text-xl hover:from-rose-600 hover:to-pink-700 transition-all active:scale-95 shadow-[0_10px_20px_-10px_rgba(244,63,94,0.6)] mb-2 w-full max-w-sm flex items-center justify-center gap-2 md:gap-3 z-10 border border-rose-400/30";
+                
+                container.classList.remove('border-rose-300', 'bg-rose-50/20');
+                timerDisplay.classList.remove('text-rose-500', 'font-bold');
+                indicator.classList.add('hidden');
+            }
+        }
+
+        async function shareVideo() {
+            if (!globalRecordedBlob) return;
+            const file = new File([globalRecordedBlob], `SpeakUp_Presentation.${currentExt}`, { type: globalRecordedBlob.type });
+            
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                try {
+                    await navigator.share({ title: 'My SpeakUp Presentation', text: 'Here is my presentation recording!', files: [file] });
+                } catch (err) { console.log("Share cancelled"); }
+            } else {
+                alert("Direct WhatsApp sharing is not supported on this browser. Please use the 'Save to Device' button below, then share manually.");
+            }
+        }
+    </script>
+</body>
+</html>
